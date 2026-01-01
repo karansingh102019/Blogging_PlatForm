@@ -363,6 +363,8 @@ export default function FloatingLines({
 
     const setSize = () => {
       const el = containerRef.current;
+      if (!el) return; // NULL CHECK ADDED HERE
+      
       const width = el.clientWidth || 1;
       const height = el.clientHeight || 1;
 
@@ -432,7 +434,7 @@ export default function FloatingLines({
 
     return () => {
       cancelAnimationFrame(raf);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
+      
       if (ro && containerRef.current) {
         ro.disconnect();
       }
@@ -449,7 +451,6 @@ export default function FloatingLines({
         renderer.domElement.parentElement.removeChild(renderer.domElement);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     linesGradient,
     enabledWaves,

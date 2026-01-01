@@ -8,13 +8,17 @@ import { Inter } from "next/font/google";
 import { Great_Vibes } from "next/font/google";
 import {
   FiSearch,
-  FiFilter,
   FiX,
-  FiHome,
-  FiChevronRight,
   FiBook,
+  FiTrendingUp,
+  FiChevronLeft,
+  FiChevronRight,
+  FiEdit3,
+  FiUsers,
+  FiFileText,
 } from "react-icons/fi";
 import Threads from "../components/Threads ";
+import GradientText from "../components/GradientText";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -33,15 +37,23 @@ export default function BlogsPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const blogsPerPage = 9;
 
   useEffect(() => {
+    // Check if user is logged in
+    const checkAuth = () => {
+      const token =
+        localStorage.getItem("token") || sessionStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    };
+    checkAuth();
+
     const fetchBlogs = async () => {
       try {
         const res = await fetch("/api/blog");
         const data = await res.json();
 
-        // ✅ SAFETY CHECK
         if (Array.isArray(data)) {
           setBlogs(data);
           setFilteredBlogs(data);
@@ -64,7 +76,6 @@ export default function BlogsPage() {
     fetchBlogs();
   }, []);
 
-  // Search Filter
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setFilteredBlogs(blogs);
@@ -74,10 +85,9 @@ export default function BlogsPage() {
       );
       setFilteredBlogs(filtered);
     }
-    setCurrentPage(1); // Reset to first page on search
+    setCurrentPage(1);
   }, [searchQuery, blogs]);
 
-  // Pagination Logic
   const indexOfLastBlog = currentPage * blogsPerPage;
   const indexOfFirstBlog = indexOfLastBlog - blogsPerPage;
   const currentBlogs = filteredBlogs.slice(indexOfFirstBlog, indexOfLastBlog);
@@ -93,15 +103,15 @@ export default function BlogsPage() {
     <>
       <Navbar />
 
-      {/* Hero Section */}
-      <section className=" relative bg-black text-white py-32">
+      {/* Hero Section - UNCHANGED */}
+      <section className="relative bg-black text-white py-32">
         <div className="absolute inset-0 z-0 pt-10">
           <Threads amplitude={2} distance={0.1} enableMouseInteraction={true} />
         </div>
 
-        <div className="max-w-7xl mx-auto px-6 pt-10 text-center">
+        <div className="max-w-7xl mx-auto px-6 pt-10 text-center ">
           <h1
-            className={` ${greatVibes.className} text-4xl md:text-7xl font-bold mb-4`}
+            className={`${greatVibes.className} text-4xl md:text-7xl font-bold mb-4`}
           >
             Explore Our Blog Collection
           </h1>
@@ -109,11 +119,10 @@ export default function BlogsPage() {
             Discover amazing stories, insights, and knowledge from our community
           </p>
 
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto">
-            <div className="relative">
+          <div className="max-w-2xl mx-auto shadow-gray-500 shadow-md  rounded-full ">
+            <div className="relative ">
               <FiSearch
-                className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-200"
                 size={24}
               />
               <input
@@ -121,7 +130,7 @@ export default function BlogsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search blogs by title..."
-                className="w-full pl-14 pr-12 py-4 rounded-full text-gray-900 text-lg focus:ring-4 focus:ring-white/30 focus:outline-none shadow-2xl"
+                className="w-full pl-14 pr-12 py-4 rounded-full text-gray-200 text-lg focus:ring-4 focus:ring-white/30 focus:outline-none shadow-2xl"
               />
               {searchQuery && (
                 <button
@@ -133,7 +142,6 @@ export default function BlogsPage() {
               )}
             </div>
 
-            {/* Search Results Info */}
             {searchQuery && (
               <p className="mt-4 text-white/80">
                 Found {filteredBlogs.length} result
@@ -144,163 +152,278 @@ export default function BlogsPage() {
         </div>
       </section>
 
-      {/* Blogs Section */}
-      <section className="max-w-7xl mx-auto px-6 py-12">
-        {/* Stats Bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-8 bg-white p-4 rounded-xl shadow-lg">
-          <div className="flex items-center gap-2 mb-4 sm:mb-0">
-            <FiBook className="text-blue-600" size={24} />
-            <h2 className="text-xl font-bold text-gray-800">
-              All Blogs ({filteredBlogs.length})
-            </h2>
-          </div>
-
-          {!searchQuery && (
-            <p className="text-gray-600">
-              Showing {indexOfFirstBlog + 1} -{" "}
-              {Math.min(indexOfLastBlog, filteredBlogs.length)} of{" "}
-              {filteredBlogs.length} blogs
-            </p>
-          )}
-        </div>
-
-        {/* Loading State */}
-        {loading ? (
-          <div className="text-center py-20">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 mx-auto mb-4"></div>
-            <p className="text-gray-600 text-lg">Loading blogs...</p>
-          </div>
-        ) : filteredBlogs.length === 0 ? (
-          /* Empty State */
-          <div className="text-center py-20">
-            <div className="bg-gray-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FiSearch className="text-gray-400" size={48} />
-            </div>
-            <h3 className="text-2xl font-bold text-gray-800 mb-3">
-              {searchQuery
-                ? `No blogs found for "${searchQuery}"`
-                : "No blogs published yet"}
-            </h3>
-            <p className="text-gray-600 mb-6">
-              {searchQuery
-                ? "Try searching with different keywords"
-                : "Check back later for new content"}
-            </p>
-            {searchQuery && (
-              <button
-                onClick={clearSearch}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
-              >
-                Clear Search
-              </button>
-            )}
-          </div>
-        ) : (
-          <>
-            {/* Blogs Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {currentBlogs.map((blog) => (
-                <BlogCard
-                  key={blog.id}
-                  id={blog.id}
-                  title={blog.title}
-                  desc={blog.description}
-                  image={blog.thumbnail}
-                  author={blog.author}
-                  avatar={blog.avatar}
-                />
-              ))}
-            </div>
-
-            {/* Pagination */}
-            {totalPages > 1 && (
-              <div className="mt-12 flex items-center justify-center gap-2">
-                {/* Previous Button */}
-                <button
-                  onClick={() => paginate(currentPage - 1)}
-                  disabled={currentPage === 1}
-                  className="px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                >
-                  Previous
-                </button>
-
-                {/* Page Numbers */}
-                <div className="flex gap-2">
-                  {[...Array(totalPages)].map((_, index) => {
-                    const pageNumber = index + 1;
-
-                    // Show first page, last page, current page, and pages around current
-                    if (
-                      pageNumber === 1 ||
-                      pageNumber === totalPages ||
-                      (pageNumber >= currentPage - 1 &&
-                        pageNumber <= currentPage + 1)
-                    ) {
-                      return (
-                        <button
-                          key={pageNumber}
-                          onClick={() => paginate(pageNumber)}
-                          className={`w-10 h-10 rounded-lg font-semibold transition ${
-                            currentPage === pageNumber
-                              ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
-                              : "bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50"
-                          }`}
-                        >
-                          {pageNumber}
-                        </button>
-                      );
-                    }
-
-                    // Show ellipsis
-                    if (
-                      pageNumber === currentPage - 2 ||
-                      pageNumber === currentPage + 2
-                    ) {
-                      return (
-                        <span
-                          key={pageNumber}
-                          className="w-10 h-10 flex items-center justify-center text-gray-400"
-                        >
-                          ...
-                        </span>
-                      );
-                    }
-
-                    return null;
-                  })}
+      {/* Professional Blogs Section */}
+      <section className="bg-[#0a0e2e] ">
+        <div className="max-w-7xl mx-auto px-6 py-12">
+          {/* Professional Stats Header */}
+          <div className="mb-16">
+            <div className="bg-black/10 backdrop-blur-2xl rounded-lg shadow-sm border border-gray-500 p-6">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                {/* Left - Title & Count */}
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <FiBook className="text-white" size={24} />
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-semibold text-gray-300">
+                      Published Articles
+                    </h2>
+                    <p className="text-sm text-gray-400 mt-0.5">
+                      {!searchQuery
+                        ? `${filteredBlogs.length} total articles`
+                        : `${filteredBlogs.length} results found`}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Next Button */}
-                <button
-                  onClick={() => paginate(currentPage + 1)}
-                  disabled={currentPage === totalPages}
-                  className="px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-                >
-                  Next
-                </button>
+                {/* Right - Stats Grid */}
+                <div className="flex gap-8">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-1">
+                      Total Articles
+                    </p>
+                    <p className="text-2xl font-bold text-gray-400">
+                      {filteredBlogs.length}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-400 uppercase tracking-wide mb-1">
+                      Current Page
+                    </p>
+                    <p className="text-2xl font-bold text-blue-600">
+                      {currentPage}/{totalPages || 1}
+                    </p>
+                  </div>
+                </div>
               </div>
-            )}
-          </>
-        )}
+            </div>
+          </div>
+
+          {/* Loading State */}
+          {loading ? (
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-20">
+              <div className="text-center">
+                <div className="inline-block relative">
+                  <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-2">
+                  Loading Articles
+                </h3>
+                <p className="text-gray-500">
+                  Please wait while we fetch the content...
+                </p>
+              </div>
+            </div>
+          ) : filteredBlogs.length === 0 ? (
+            /* Professional Empty State */
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-20">
+              <div className="text-center max-w-md mx-auto">
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <FiFileText className="text-gray-400" size={40} />
+                </div>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-3">
+                  {searchQuery ? "No Results Found" : "No Articles Yet"}
+                </h3>
+                <p className="text-gray-500 mb-8 leading-relaxed">
+                  {searchQuery
+                    ? `We couldn't find any articles matching "${searchQuery}". Try different keywords or browse all articles.`
+                    : "Be the first to contribute and share your knowledge with the community."}
+                </p>
+                {searchQuery ? (
+                  <button
+                    onClick={clearSearch}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    Clear Search
+                  </button>
+                ) : (
+                  <Link
+                    href={isLoggedIn ? "/dashboard/createblog" : "/auth/signup"}
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    <FiEdit3 size={18} />
+                    Start Writing
+                  </Link>
+                )}
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* Blogs Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                {currentBlogs.map((blog) => (
+                  <BlogCard
+                    key={blog.id}
+                    id={blog.id}
+                    title={blog.title}
+                    desc={blog.description}
+                    image={blog.thumbnail}
+                    author={blog.author}
+                    avatar={blog.avatar}
+                    views={blog.views || 0}
+                    likes={blog.likes || 0}
+                  />
+                ))}
+              </div>
+
+              {/* Professional Pagination */}
+              {totalPages > 1 && (
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                  <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    {/* Previous Button */}
+                    <button
+                      onClick={() => paginate(currentPage - 1)}
+                      disabled={currentPage === 1}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
+                    >
+                      <FiChevronLeft size={18} />
+                      Previous
+                    </button>
+
+                    {/* Page Numbers */}
+                    <div className="flex items-center gap-2">
+                      {[...Array(totalPages)].map((_, index) => {
+                        const pageNumber = index + 1;
+
+                        if (
+                          pageNumber === 1 ||
+                          pageNumber === totalPages ||
+                          (pageNumber >= currentPage - 1 &&
+                            pageNumber <= currentPage + 1)
+                        ) {
+                          return (
+                            <button
+                              key={pageNumber}
+                              onClick={() => paginate(pageNumber)}
+                              className={`min-w-[40px] h-10 rounded-lg font-medium transition-colors ${
+                                currentPage === pageNumber
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                              }`}
+                            >
+                              {pageNumber}
+                            </button>
+                          );
+                        }
+
+                        if (
+                          pageNumber === currentPage - 2 ||
+                          pageNumber === currentPage + 2
+                        ) {
+                          return (
+                            <span
+                              key={pageNumber}
+                              className="px-2 text-gray-400"
+                            >
+                              ...
+                            </span>
+                          );
+                        }
+
+                        return null;
+                      })}
+                    </div>
+
+                    {/* Next Button */}
+                    <button
+                      onClick={() => paginate(currentPage + 1)}
+                      disabled={currentPage === totalPages}
+                      className="flex items-center gap-2 px-5 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white"
+                    >
+                      Next
+                      <FiChevronRight size={18} />
+                    </button>
+                  </div>
+
+                  {/* Page Info */}
+                  <div className="mt-4 pt-4 border-t border-gray-200 text-center">
+                    <p className="text-sm text-gray-500">
+                      Showing{" "}
+                      <span className="font-medium text-gray-700">
+                        {indexOfFirstBlog + 1}
+                      </span>{" "}
+                      to{" "}
+                      <span className="font-medium text-gray-700">
+                        {Math.min(indexOfLastBlog, filteredBlogs.length)}
+                      </span>{" "}
+                      of{" "}
+                      <span className="font-medium text-gray-700">
+                        {filteredBlogs.length}
+                      </span>{" "}
+                      results
+                    </p>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+        </div>
       </section>
 
-      {/* CTA Section */}
+      {/* Professional CTA Section */}
       {filteredBlogs.length > 0 && (
-        <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-16 mt-12">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Want to Share Your Story?
-            </h2>
-            <p className="text-xl mb-8 opacity-90">
-              Join our community of writers and start creating amazing content
-              today!
-            </p>
-            <Link
-              href="/auth/signup"
-              className="inline-block px-8 py-4 bg-white text-purple-600 rounded-full font-bold text-lg hover:bg-gray-100 transition shadow-2xl"
-            >
-              Start Writing Now
-            </Link>
+        <section className="bg-black border-t border-blue-800">
+          <div className="max-w-7xl mx-auto px-6 py-16">
+            <div className="bg-[#3247e6]/20 backdrop-blur-sm rounded-2xl p-12 border border-white/20">
+              <div className="max-w-3xl mx-auto text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 rounded-full text-sm font-medium text-white mb-6">
+                  <FiUsers size={16} />
+                  Join Our Community
+                </div>
+
+                <h2
+                  className={` ${greatVibes.className} text-3xl md:text-5xl font-bold text-white mb-4`}
+                >
+                  <GradientText
+                    colors={[
+                      "#40ffaa",
+                      "#4079ff",
+                      "#40ffaa",
+                      "#4079ff",
+                      "#40ffaa",
+                    ]}
+                    animationSpeed={8}
+                    showBorder={false}
+                    className="p-6"
+                  >
+                    Share Your Knowledge & Experience
+                  </GradientText>
+                </h2>
+
+                <p className="text-lg text-blue-50 mb-8 leading-relaxed mb-10">
+                  Become a contributor and help others learn from your
+                  expertise. Create engaging content and grow your audience.
+                </p>
+
+                <Link
+                  href={isLoggedIn ? "/dashboard/createBlog" : "/auth/signup"}
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-transparent   hover:bg-gray-300  hover:text-gray-700 text-gray-400 rounded-lg font-semibold hover:bg-blue-50 transition-colors shadow-black/30 shadow-xl"
+                >
+                  <FiEdit3 size={20} />
+                  {isLoggedIn ? "Start Writing Now" : "Create New Article"}
+                </Link>
+
+                {/* Status */}
+                <div className="grid grid-cols-3 gap-8 mt-12 pt-12 border-t border-white/20">
+                  <div>
+                    <p className="text-3xl font-bold text-white mb-1">
+                      {blogs.length}+
+                    </p>
+                    <p className="text-sm text-blue-100">Articles Published</p>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-white mb-1">
+                      {new Set(blogs.map((b) => b.author)).size}+
+                    </p>
+                    <p className="text-sm text-blue-100">Active Writers</p>
+                  </div>
+                  <div>
+                    <p className="text-3xl font-bold text-white mb-1">24/7</p>
+                    <p className="text-sm text-blue-100">Community Support</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       )}

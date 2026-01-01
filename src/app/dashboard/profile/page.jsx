@@ -23,6 +23,7 @@ import {
   FiChevronRight,
 } from "react-icons/fi";
 import GradientText from "@/app/components/GradientText";
+import DashboardNav from "@/app/components/dashboardNav";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -164,40 +165,44 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600 text-lg">Loading profile...</p>
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-t-4 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600 text-base sm:text-lg">Loading profile...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="">
-      {/* Breadcrumb Navigation */}
-      <div className="bg-black/50 backdrop-blur-xl border-b mb-8 rounded-bl-lg sticky top-0 z-10">
-        <div className="max-w-full px-6 py-4">
-          <div className="flex items-center gap-2 text-sm text-gray-400">
+    <div className="px-3 sm:px-4 lg:px-0">
+
+      <div className="lg:hidden">
+                    <DashboardNav/>
+                  </div>
+            {/* Breadcrumb Navigation */}
+            <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
+        <div className="max-w-full px-3 sm:px-6 py-3 sm:py-4">
+          <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-400 overflow-x-auto">
             <Link
               href="/"
-              className="hover:text-blue-600 flex items-center gap-1"
+              className="hover:text-blue-600 flex items-center gap-1 whitespace-nowrap"
             >
-              <FiHome size={16} />
-              Home
+              <FiHome size={14} className="sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Home</span>
             </Link>
-            <FiChevronRight size={14} className="text-gray-400" />
+            <FiChevronRight size={12} className="text-gray-400 sm:w-3.5 sm:h-3.5" />
             <Link
               href="/dashboard"
-              className="hover:text-blue-600 flex items-center gap-1"
+              className="hover:text-blue-600 flex items-center gap-1 whitespace-nowrap"
             >
-              <FiBookOpen size={16} />
-              Dashboard
+              <FiBookOpen size={14} className="sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Dashboard</span>
             </Link>
-            <FiChevronRight size={14} className="text-gray-400" />
-            <span className="text-blue-600 font-medium flex items-center gap-1">
-              <FiSettings size={16} />
-              Profile Settings
+            <FiChevronRight size={12} className="text-gray-400 sm:w-3.5 sm:h-3.5" />
+            <span className="text-blue-600 font-medium flex items-center gap-1 whitespace-nowrap">
+              <FiSettings size={14} className="sm:w-4 sm:h-4" />
+              Profile
             </span>
           </div>
         </div>
@@ -206,10 +211,10 @@ export default function ProfilePage() {
       {/* Main Content - Full Width */}
       <div className="w-full">
         {/* Page Header */}
-        <div className="bg-black/40 backdrop-blur-xl border-b px-6 py-6 rounded-bl-lg rounded-tl-lg">
+        <div className="bg-black/40 backdrop-blur-xl border-b px-3 sm:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
           <div className="max-w-7xl mx-auto">
             <h1
-              className={`${greatVibes.className} text-5xl mt-2 font-bold text-gray-300 flex items-center gap-3`}
+              className={`${greatVibes.className} text-3xl sm:text-4xl lg:text-5xl mt-2 font-bold text-gray-300 flex items-center gap-2 sm:gap-3`}
             >
               Profile Settings
             </h1>
@@ -217,7 +222,7 @@ export default function ProfilePage() {
               colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
               animationSpeed={8}
               showBorder={false}
-              className={`${inter.variable} text-medium mt-3 ml-1 `}
+              className={`${inter.variable} text-xs sm:text-sm lg:text-medium mt-2 sm:mt-3 ml-0 sm:ml-1`}
             >
               Manage your personal information, avatar, cover photo, and social
               links
@@ -226,10 +231,10 @@ export default function ProfilePage() {
         </div>
 
         {/* Profile Card - Full Width */}
-        <div className="max-w-7xl mx-auto pr-6 py-8">
-          <div className="bg-black/20 backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden">
+        <div className="max-w-7xl mx-auto px-3 sm:pr-6 py-4 sm:py-8">
+          <div className="bg-black/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl overflow-hidden">
             {/* COVER PHOTO SECTION */}
-            <div className="relative w-full h-80 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30">
+            <div className="relative w-full h-48 sm:h-64 lg:h-80 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30">
               {cover ? (
                 <Image
                   src={cover}
@@ -240,36 +245,36 @@ export default function ProfilePage() {
                 />
               ) : (
                 <div className="w-full h-full flex flex-col items-center justify-center text-white">
-                  <FiCamera className="text-white/40 text-8xl mb-4" />
-                  <p className="text-xl font-medium opacity-60">
+                  <FiCamera className="text-white/40 text-4xl sm:text-6xl lg:text-8xl mb-2 sm:mb-4" />
+                  <p className="text-sm sm:text-lg lg:text-xl font-medium opacity-60 px-4 text-center">
                     Upload your cover photo
                   </p>
                 </div>
               )}
 
               {/* Cover Actions */}
-              <div className="absolute top-6 right-6 flex gap-3">
+              <div className="absolute top-3 sm:top-6 right-3 sm:right-6 flex gap-2 sm:gap-3">
                 {cover && (
                   <button
                     onClick={removeCover}
-                    className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition shadow-lg flex items-center gap-2 font-medium"
+                    className="bg-red-500 text-white px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg hover:bg-red-600 transition shadow-lg flex items-center gap-1 sm:gap-2 font-medium text-xs sm:text-base"
                     title="Remove Cover"
                   >
-                    <FiX size={20} />
-                    Remove
+                    <FiX size={16} className="sm:w-5 sm:h-5" />
+                    <span className="hidden sm:inline">Remove</span>
                   </button>
                 )}
 
-                <label className="bg-white text-gray-700 px-5 py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition shadow-lg flex items-center gap-2 font-medium">
+                <label className="bg-white text-gray-700 px-2 sm:px-5 py-1.5 sm:py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition shadow-lg flex items-center gap-1 sm:gap-2 font-medium text-xs sm:text-base">
                   {uploadingCover ? (
                     <>
-                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
-                      <span>Uploading...</span>
+                      <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 border-2 border-blue-600 border-t-transparent"></div>
+                      <span className="hidden sm:inline">Uploading...</span>
                     </>
                   ) : (
                     <>
-                      <FiCamera size={20} />
-                      <span>Change Cover</span>
+                      <FiCamera size={16} className="sm:w-5 sm:h-5" />
+                      <span className="hidden xs:inline">Change</span>
                     </>
                   )}
                   <input
@@ -284,9 +289,9 @@ export default function ProfilePage() {
             </div>
 
             {/* PROFILE BODY */}
-            <div className="px-8 lg:px-12 pb-12">
+            <div className="px-4 sm:px-8 lg:px-12 pb-8 sm:pb-12">
               {/* Avatar Section */}
-              <div className="relative -mt-24 mb-8">
+              <div className="relative -mt-16 sm:-mt-20 lg:-mt-24 mb-6 sm:mb-8">
                 <div className="relative inline-block">
                   <div className="relative">
                     {avatar ? (
@@ -295,20 +300,20 @@ export default function ProfilePage() {
                         width={200}
                         height={200}
                         alt="Avatar"
-                        className="rounded-full border-4 border-white shadow-2xl w-46 h-46 object-cover"
+                        className="rounded-full border-4 border-white shadow-2xl w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 object-cover"
                       />
                     ) : (
-                      <div className="w-48 h-48 rounded-full border-8 border-white shadow-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-6xl font-bold">
-                        {name ? name[0].toUpperCase() : <FiUser size={80} />}
+                      <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full border-4 sm:border-8 border-white shadow-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-4xl sm:text-5xl lg:text-6xl font-bold">
+                        {name ? name[0].toUpperCase() : <FiUser size={48} className="sm:w-16 sm:h-16 lg:w-20 lg:h-20" />}
                       </div>
                     )}
 
                     {/* Avatar Upload Button */}
-                    <label className="absolute bottom-3 right-3 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700 transition shadow-xl border-2 border-white">
+                    <label className="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 lg:bottom-3 lg:right-3 bg-blue-600 text-white p-1.5 sm:p-2 rounded-full cursor-pointer hover:bg-blue-700 transition shadow-xl border-2 border-white">
                       {uploadingAvatar ? (
-                        <div className="animate-spin rounded-full h-6 w-6 border-2 border-white border-t-transparent"></div>
+                        <div className="animate-spin rounded-full h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 border-2 border-white border-t-transparent"></div>
                       ) : (
-                        <FiCamera size={18} />
+                        <FiCamera size={14} className="sm:w-4 sm:h-4 lg:w-[18px] lg:h-[18px]" />
                       )}
                       <input
                         type="file"
@@ -324,17 +329,17 @@ export default function ProfilePage() {
                   {avatar && (
                     <button
                       onClick={removeAvatar}
-                      className="absolute top-2 right-4 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition shadow-xl border-2 border-white"
+                      className="absolute top-1 right-2 sm:top-2 sm:right-3 lg:right-4 bg-red-500 text-white p-1 rounded-full hover:bg-red-600 transition shadow-xl border-2 border-white"
                       title="Remove Avatar"
                     >
-                      <FiX size={20} />
+                      <FiX size={16} className="sm:w-5 sm:h-5" />
                     </button>
                   )}
                 </div>
 
                 {/* Upload Info */}
-                <div className="mt-4">
-                  <p className="text-sm text-gray-400">
+                <div className="mt-3 sm:mt-4">
+                  <p className="text-xs sm:text-sm text-gray-400">
                     <span className="font-medium">Tip:</span> Use a square image
                     for best results (recommended: 400x400px)
                   </p>
@@ -342,25 +347,25 @@ export default function ProfilePage() {
               </div>
 
               {/* Form Grid - Full Width */}
-              <div className="space-y-8">
+              <div className="space-y-6 sm:space-y-8">
                 {/* Basic Info Section */}
-                <div className="bg-gray-200 p-8 rounded-xl border-2 border-gray-200">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                    <div className="bg-blue-600 text-white p-2 rounded-lg">
-                      <FiUser size={24} />
+                <div className="bg-gray-200 p-4 sm:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                    <div className="bg-blue-600 text-white p-1.5 sm:p-2 rounded-lg">
+                      <FiUser size={18} className="sm:w-6 sm:h-6" />
                     </div>
                     Basic Information
                   </h2>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     {/* Name */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                         Full Name *
                       </label>
                       <input
                         type="text"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-lg"
+                        className="w-full px-3 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition text-sm sm:text-base lg:text-lg"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         placeholder="Enter your full name"
@@ -369,17 +374,17 @@ export default function ProfilePage() {
 
                     {/* Email (Read-only) */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">
                         Email Address
                       </label>
                       <div className="relative">
                         <FiMail
-                          className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                          size={20}
+                          className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-400"
+                          size={16}
                         />
                         <input
                           type="email"
-                          className="w-full pl-12 pr-5 py-4 border-2 border-gray-300 rounded-xl bg-gray-100 cursor-not-allowed text-lg"
+                          className="w-full pl-9 sm:pl-12 pr-3 sm:pr-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl bg-gray-100 cursor-not-allowed text-sm sm:text-base lg:text-lg"
                           value={email}
                           disabled
                         />
@@ -391,23 +396,23 @@ export default function ProfilePage() {
                   </div>
 
                   {/* Bio - Full Width */}
-                  <div className="mt-6">
-                    <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                      <FiFileText className="text-blue-600" size={18} />
+                  <div className="mt-4 sm:mt-6">
+                    <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                      <FiFileText className="text-blue-600 sm:w-[18px] sm:h-[18px] " size={16}  />
                       Bio
                     </label>
                     <textarea
                       value={bio}
                       onChange={(e) => setBio(e.target.value)}
                       maxLength={500}
-                      className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition h-40 resize-none text-lg"
+                      className="w-full px-3 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition h-32 sm:h-40 resize-none text-sm sm:text-base lg:text-lg"
                       placeholder="Tell us about yourself... What do you do? What are your interests?"
                     />
-                    <div className="flex items-center justify-between mt-2">
-                      <p className="text-sm text-gray-500">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-2 gap-1 sm:gap-0">
+                      <p className="text-xs sm:text-sm text-gray-500">
                         Write a brief description about yourself
                       </p>
-                      <p className="text-sm font-medium text-gray-700">
+                      <p className="text-xs sm:text-sm font-medium text-gray-700">
                         {bio.length}/500
                       </p>
                     </div>
@@ -415,25 +420,25 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Social Links Section */}
-                <div className="bg-gray-50 p-8 rounded-xl border-2 border-gray-200">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-                    <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-2 rounded-lg">
-                      <FiGlobe size={24} />
+                <div className="bg-gray-50 p-4 sm:p-6 lg:p-8 rounded-xl border-2 border-gray-200">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+                    <div className="bg-gradient-to-r from-pink-500 to-purple-600 text-white p-1.5 sm:p-2 rounded-lg">
+                      <FiGlobe size={18} className="sm:w-6 sm:h-6" />
                     </div>
                     Social Links
                   </h2>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                     {/* Instagram */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                        <FiInstagram className="text-pink-500" size={18} />
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <FiInstagram className="text-pink-500 sm:w-[18px] sm:h-[18px]" size={16} />
                         Instagram
                       </label>
                       <input
                         type="url"
                         placeholder="https://instagram.com/yourusername"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-lg"
+                        className="w-full px-3 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm sm:text-base lg:text-lg"
                         value={social.instagram}
                         onChange={(e) =>
                           setSocial({ ...social, instagram: e.target.value })
@@ -443,14 +448,14 @@ export default function ProfilePage() {
 
                     {/* Twitter */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                        <FiTwitter className="text-blue-400" size={18} />
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <FiTwitter className="text-blue-400 sm:w-[18px] sm:h-[18px]" size={16}  />
                         Twitter
                       </label>
                       <input
                         type="url"
                         placeholder="https://twitter.com/yourusername"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition text-lg"
+                        className="w-full px-3 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition text-sm sm:text-base lg:text-lg"
                         value={social.twitter}
                         onChange={(e) =>
                           setSocial({ ...social, twitter: e.target.value })
@@ -460,14 +465,14 @@ export default function ProfilePage() {
 
                     {/* LinkedIn */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                        <FiLinkedin className="text-blue-700" size={18} />
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <FiLinkedin className="text-blue-700 sm:w-[18px] sm:h-[18px]" size={16}  />
                         LinkedIn
                       </label>
                       <input
                         type="url"
                         placeholder="https://linkedin.com/in/yourusername"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-700 focus:border-blue-700 transition text-lg"
+                        className="w-full px-3 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-700 focus:border-blue-700 transition text-sm sm:text-base lg:text-lg"
                         value={social.linkedin}
                         onChange={(e) =>
                           setSocial({ ...social, linkedin: e.target.value })
@@ -477,14 +482,14 @@ export default function ProfilePage() {
 
                     {/* Website */}
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
-                        <FiGlobe className="text-green-600" size={18} />
+                      <label className="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2">
+                        <FiGlobe className="text-green-600 sm:w-[18px] sm:h-[18px]" size={16} />
                         Website
                       </label>
                       <input
                         type="url"
                         placeholder="https://yourwebsite.com"
-                        className="w-full px-5 py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-600 focus:border-green-600 transition text-lg"
+                        className="w-full px-3 sm:px-5 py-3 sm:py-4 border-2 border-gray-300 rounded-xl focus:ring-2 focus:ring-green-600 focus:border-green-600 transition text-sm sm:text-base lg:text-lg"
                         value={social.website}
                         onChange={(e) =>
                           setSocial({ ...social, website: e.target.value })
@@ -495,26 +500,26 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Save Button */}
-                <div className="flex items-center justify-end gap-4 pt-6">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 sm:gap-4 pt-4 sm:pt-6">
                   <Link
                     href="/dashboard"
-                    className="px-8 py-4 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition font-semibold text-lg"
+                    className="px-6 sm:px-8 py-3 sm:py-4 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition font-semibold text-base sm:text-lg text-center"
                   >
                     Cancel
                   </Link>
                   <button
                     onClick={saveProfile}
                     disabled={saving}
-                    className="px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition font-semibold text-lg shadow-lg flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-8 sm:px-12 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition font-semibold text-base sm:text-lg shadow-lg flex items-center justify-center gap-2 sm:gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {saving ? (
                       <>
-                        <div className="animate-spin rounded-full h-6 w-6 border-2 border-white border-t-transparent"></div>
+                        <div className="animate-spin rounded-full h-5 w-5 sm:h-6 sm:w-6 border-2 border-white border-t-transparent"></div>
                         <span>Saving Changes...</span>
                       </>
                     ) : (
                       <>
-                        <FiSave size={22} />
+                        <FiSave size={18} className="sm:w-[22px] sm:h-[22px]" />
                         <span>Save Profile</span>
                       </>
                     )}

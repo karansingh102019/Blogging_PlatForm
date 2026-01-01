@@ -1,0 +1,29 @@
+ <svg 
+            width="120" 
+            height="40" 
+            viewBox="0 0 330 120" 
+            fill="none"
+            className="sm:w-[150px] sm:h-[50px]"
+          >
+            <g transform="scale(0.8) translate(10, 15)">
+              <path
+                d="M40 100 L40 20 L70 20 L70 70 L110 20 L150 20 L150 100 L120 100 L120 50 L85 100 L40 100 Z"
+                stroke="#3247e6"
+                strokeWidth="8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </g>
+
+            <text
+              x="140"
+              y="95"
+              fontFamily="Inter, Poppins, sans-serif"
+              fontSize="60"
+              fontWeight="600"
+              fill="#3247e6"
+              letterSpacing="4"
+            >
+              EXUS
+            </text>
+          </svg>

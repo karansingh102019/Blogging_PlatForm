@@ -14,9 +14,9 @@ import {
   FiX,
   FiChevronLeft,
   FiChevronRight,
+  FiBookmark,
 } from "react-icons/fi";
 import { SidebarContext } from "@/context/SidebarContext";
-import Silk from "../components/silk";
 import DarkVeil from "../components/silk";
 
 const navitems = [
@@ -25,15 +25,17 @@ const navitems = [
   { name: "My Blogs", icon: <FiBook />, link: "/dashboard/myBlog" },
   { name: "Drafts", icon: <FiArchive />, link: "/dashboard/drafts" },
   { name: "Profile", icon: <FiUser />, link: "/dashboard/profile" },
-  { name: "HomePage", icon: <FiHome/>, link:"/"}
+  {
+    name: "Saved Blogs",
+    icon: <FiBookmark />,
+    link: "/dashboard/savedblog",
+  },
 ];
 
 export default function DashboardLayout({ children }) {
   const [isOpen, setIsOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const pathname = usePathname();
-
-  // ⭐ Load logged-in user
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -57,10 +59,11 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <SidebarContext.Provider value={{ isOpen, setIsOpen }}>
+    <SidebarContext.Provider value={{ isOpen, setIsOpen, isMobileOpen, setIsMobileOpen }}>
       <div className="flex relative min-h-screen">
+        {/* Background */}
         <div className="fixed inset-0 z-0 pointer-events-none">
-           <DarkVeil />
+          <DarkVeil />
         </div>
 
         {/* MOBILE OVERLAY */}
@@ -71,10 +74,10 @@ export default function DashboardLayout({ children }) {
           />
         )}
 
-        {/* SIDEBAR - FIXED */}
+        {/* SIDEBAR */}
         <aside
           className={`fixed top-0 left-0 h-screen backdrop-blur-xl bg-black/60 shadow-2xl transition-all duration-300 z-50 flex flex-col
-            ${isOpen ? "w-72" : "w-20"}
+            ${isOpen ? "w-64 sm:w-72" : "w-20"}
             ${
               isMobileOpen
                 ? "translate-x-0"
@@ -82,15 +85,16 @@ export default function DashboardLayout({ children }) {
             }`}
         >
           {/* Header Section */}
-          <div className="p-6 border-b border-white/10">
+          <div className="p-4 sm:p-6 border-b border-white/10">
             <div className="flex items-center justify-between">
               {isOpen ? (
-                <Link href="/" className="-m-2 -ml-6">
+                <Link href="/" className="-m-2 -ml-4 sm:-ml-6">
                   <svg
-                    width="150"
-                    height="50"
+                    width="120"
+                    height="40"
                     viewBox="0 0 330 120"
                     fill="none"
+                    className="sm:w-[150px] sm:h-[50px]"
                   >
                     <g transform="scale(0.8) translate(10, 15)">
                       <path
@@ -101,7 +105,6 @@ export default function DashboardLayout({ children }) {
                         strokeLinejoin="round"
                       />
                     </g>
-
                     <text
                       x="140"
                       y="95"
@@ -116,12 +119,13 @@ export default function DashboardLayout({ children }) {
                   </svg>
                 </Link>
               ) : (
-                <Link href="/" className="-m-6">
+                <Link href="/" className="-m-4 sm:-m-6">
                   <svg
-                    width="150"
-                    height="50"
+                    width="120"
+                    height="40"
                     viewBox="0 0 330 120"
                     fill="none"
+                    className="sm:w-[150px] sm:h-[50px]"
                   >
                     <g transform="scale(0.8) translate(10, 15)">
                       <path
@@ -135,23 +139,12 @@ export default function DashboardLayout({ children }) {
                   </svg>
                 </Link>
               )}
-
-              {/* Toggle Button - Desktop */}
-              <button
-                onClick={() => setIsOpen(!isOpen)}
-                className="hidden -ml-15 lg:flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 transition text-white"
-              >
-                {isOpen ? (
-                  <FiChevronLeft size={18} />
-                ) : (
-                  <FiChevronRight size={12} />
-                )}
-              </button>
+            
 
               {/* Close Button - Mobile */}
               <button
                 onClick={() => setIsMobileOpen(false)}
-                className="lg:hidden text-white -m-8"
+                className="lg:hidden text-white"
               >
                 <FiX size={24} />
               </button>
@@ -159,7 +152,7 @@ export default function DashboardLayout({ children }) {
           </div>
 
           {/* User Profile Section */}
-          <div className="p-6 border-b border-white/10">
+          <div className="p-4 sm:p-6 border-b border-white/10">
             <div className="flex flex-col items-center">
               {/* Avatar */}
               <div className="relative">
@@ -170,7 +163,7 @@ export default function DashboardLayout({ children }) {
                     width={80}
                     height={80}
                     className={`rounded-full border-4 border-blue-400 object-cover transition-all duration-300 ${
-                      isOpen ? "w-20 h-20" : "w-12 h-12"
+                      isOpen ? "w-16 h-16 sm:w-20 sm:h-20" : "w-12 h-12"
                     }`}
                     onError={(e) => {
                       e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
@@ -181,7 +174,7 @@ export default function DashboardLayout({ children }) {
                 ) : (
                   <div
                     className={`rounded-full border-4 border-blue-400 bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold transition-all duration-300 ${
-                      isOpen ? "w-20 h-20 text-2xl" : "w-12 h-12 text-lg"
+                      isOpen ? "w-16 h-16 sm:w-20 sm:h-20 text-xl sm:text-2xl" : "w-12 h-12 text-lg"
                     }`}
                   >
                     {user?.name ? user.name[0].toUpperCase() : "U"}
@@ -189,16 +182,16 @@ export default function DashboardLayout({ children }) {
                 )}
 
                 {/* Online Status Indicator */}
-                <div className="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-black rounded-full"></div>
+                <div className="absolute bottom-0 right-0 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 border-2 border-black rounded-full"></div>
               </div>
 
               {/* User Info */}
               {isOpen && (
-                <div className="mt-4 text-center">
-                  <h3 className="font-bold text-white text-lg">
+                <div className="mt-3 sm:mt-4 text-center">
+                  <h3 className="font-bold text-white text-base sm:text-lg">
                     {user?.name || "Guest User"}
                   </h3>
-                  <p className="text-sm text-gray-400 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-400 mt-1 break-all px-2">
                     {user?.email || "guest@example.com"}
                   </p>
                 </div>
@@ -207,7 +200,7 @@ export default function DashboardLayout({ children }) {
           </div>
 
           {/* Navigation Links */}
-          <nav className="flex-1 overflow-y-auto p-4 space-y-2">
+          <nav className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-1 sm:space-y-2">
             {navitems.map((item, i) => {
               const active = pathname === item.link;
 
@@ -216,7 +209,7 @@ export default function DashboardLayout({ children }) {
                   key={i}
                   href={item.link}
                   onClick={() => setIsMobileOpen(false)}
-                  className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group relative
+                  className={`flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl transition-all duration-200 group relative
                     ${
                       active
                         ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg"
@@ -224,16 +217,16 @@ export default function DashboardLayout({ children }) {
                     }`}
                 >
                   {/* Icon */}
-                  <span className={`text-xl ${active ? "scale-110" : ""}`}>
+                  <span className={`text-lg sm:text-xl ${active ? "scale-110" : ""}`}>
                     {item.icon}
                   </span>
 
                   {/* Label */}
-                  {isOpen && <span className="font-medium">{item.name}</span>}
+                  {isOpen && <span className="font-medium text-sm sm:text-base">{item.name}</span>}
 
                   {/* Active Indicator */}
                   {active && (
-                    <div className="absolute right-4 w-2 h-2 bg-white rounded-full"></div>
+                    <div className="absolute right-3 sm:right-4 w-2 h-2 bg-white rounded-full"></div>
                   )}
 
                   {/* Tooltip for Collapsed State */}
@@ -249,13 +242,13 @@ export default function DashboardLayout({ children }) {
           </nav>
 
           {/* Logout Button */}
-          <div className="p-4 border-t border-white/10">
+          <div className="p-3 sm:p-4 border-t border-white/10">
             <button
               onClick={handleLogout}
-              className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-200 group relative`}
+              className={`w-full flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-200 group relative`}
             >
               <FiLogOut size={20} />
-              {isOpen && <span className="font-medium">Logout</span>}
+              {isOpen && <span className="font-medium text-sm sm:text-base">Logout</span>}
 
               {/* Tooltip for Collapsed State */}
               {!isOpen && (
@@ -268,21 +261,13 @@ export default function DashboardLayout({ children }) {
           </div>
         </aside>
 
-        {/* MOBILE MENU BUTTON */}
-        <button
-          onClick={() => setIsMobileOpen(true)}
-          className="fixed top-4 left-4 z-30 lg:hidden bg-white/90 backdrop-blur-sm p-3 rounded-lg shadow-lg text-gray-600 hover:bg-white"
-        >
-          <FiMenu size={24} />
-        </button>
-
         {/* MAIN CONTENT */}
         <main
           className={`flex-1 transition-all duration-300 relative z-10 ${
             isOpen ? "lg:ml-72" : "lg:ml-20"
           }`}
         >
-          <div className="pl-6 pt-0 lg:pl-8 lg:pt-0">{children}</div>
+          <div className="pl-4 sm:pl-6 lg:pl-8 ">{children}</div>
         </main>
       </div>
     </SidebarContext.Provider>

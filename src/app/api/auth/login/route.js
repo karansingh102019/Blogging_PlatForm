@@ -19,14 +19,15 @@ export async function POST(req) {
     return NextResponse.json({ error: "Invalid password" }, { status: 400 });
   }
 
-  const token = jwt.sign(
-    { id: user.id, email: user.email },
-    process.env.JWT_SECRET,
-    { expiresIn: "7d" }
-  );
+ const token = jwt.sign(
+  { userId: user.id, id: user.id, email: user.email }, 
+  process.env.JWT_SECRET,
+  { expiresIn: "7d" }
+);
 
   const res = NextResponse.json({
     message: "Login success",
+    token: token,
     user: { id: user.id, name: user.name, email: user.email },
   });
 

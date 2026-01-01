@@ -21,7 +21,9 @@ export async function GET(req) {
           b.thumbnail,
           b.createdAt,
           u.name AS author,
-          p.avatar AS avatar
+          p.avatar AS avatar,
+          (SELECT COUNT(*) FROM blog_views WHERE blogId = b.id) AS views,
+          (SELECT COUNT(*) FROM blog_like WHERE blogId = b.id) AS likes
         FROM blogs b
         JOIN users u ON b.authorId = u.id
         LEFT JOIN user_profiles p ON u.id = p.userId
@@ -42,7 +44,9 @@ export async function GET(req) {
           b.thumbnail,
           b.createdAt,
           u.name AS author,
-          p.avatar AS avatar
+          p.avatar AS avatar,
+          (SELECT COUNT(*) FROM blog_views WHERE blogId = b.id) AS views,
+          (SELECT COUNT(*) FROM blog_like WHERE blogId = b.id) AS likes
         FROM blogs b
         JOIN users u ON b.authorId = u.id
         LEFT JOIN user_profiles p ON u.id = p.userId

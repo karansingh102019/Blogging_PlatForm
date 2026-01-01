@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiEye, FiHeart } from "react-icons/fi";
 
 export default function BlogCard({
   id,
@@ -9,7 +9,9 @@ export default function BlogCard({
   desc,
   image,
   author = "John Doe",
-  avatar = "/avatar.png", // default avatar
+  avatar = "/avatar.png",
+  views = 0,
+  likes = 0,
 }) {
   return (
     <div className="
@@ -24,21 +26,39 @@ export default function BlogCard({
           width={500} 
           height={300} 
           alt={title}
-          className="w-full h-full  object-cover group-hover:scale-110 transition-all duration-500"
+          className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500"
         />
       </div>
 
       {/* Content */}
       <div className="p-5 space-y-3">
 
+        <div className="flex justify-between">
         {/* Title */}
         <h2 className="text-xl font-semibold text-gray-300 group-hover:text-gray-100 transition-colors">
           {title}
         </h2>
 
+        {/* Views and Likes Stats */}
+        <div className="flex items-center gap-4 pt-2">
+          <div className="flex items-center gap-1.5 text-blue-500">
+            <FiEye size={16} />
+            <span className="text-xs font-medium">{views.toLocaleString()}</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-red-500">
+            <FiHeart size={16} />
+            <span className="text-xs font-medium">{likes.toLocaleString()}</span>
+          </div>
+        </div>
+
+        </div>
+
+
         <p className="text-gray-400 text-sm line-clamp-3">
           {desc}
         </p>
+
+        
 
         {/* Author */}
         <div className="flex items-center gap-3 mt-3">
@@ -60,8 +80,6 @@ export default function BlogCard({
         <Link href={`/blog/${id}`}>
           <div className="flex items-center gap-2 text-blue-400 font-sm mt-4 group-hover:underline">
             Read More 
-            
-            
             <FiArrowRight size={16} className="group-hover:translate-x-1 transition"/>
           </div>
         </Link>

@@ -17,7 +17,14 @@ export async function GET(req) {
     const db = await getDB();
 
     const [blogs] = await db.query(
-      `SELECT id, title, description, thumbnail, createdAt 
+      `SELECT 
+        id, 
+        title, 
+        description, 
+        thumbnail, 
+        createdAt,
+        (SELECT COUNT(*) FROM blog_views WHERE blogId = blogs.id) AS views,
+        (SELECT COUNT(*) FROM blog_like WHERE blogId = blogs.id) AS likes
        FROM blogs 
        WHERE authorId = ? AND published = 1
        ORDER BY createdAt DESC`,
