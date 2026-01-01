@@ -85,7 +85,7 @@ export default function DashboardHome() {
       <DashboardNav />
       
       {/* Main Container with proper padding and max-width */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-2 py-2">
         
         {/* Grid Layout: Stack on mobile, Side-by-side on desktop */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
