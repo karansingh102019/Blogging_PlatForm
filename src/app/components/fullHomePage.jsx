@@ -813,7 +813,7 @@ export default function HomePage() {
                       Email
                     </h4>
                     <p className="text-gray-400 text-sm sm:text-base break-all">
-                      support@blogify.com
+                      kn8610519@gmail.com
                     </p>
                   </div>
                 </div>
@@ -827,7 +827,7 @@ export default function HomePage() {
                       Phone
                     </h4>
                     <p className="text-gray-400 text-sm sm:text-base">
-                      +91 12345 67890
+                      +91 9900 8088
                     </p>
                   </div>
                 </div>
@@ -855,7 +855,7 @@ export default function HomePage() {
                 </p>
                 <div className="flex flex-wrap gap-3 sm:gap-4">
                   <a
-                    href="#"
+                    href="https://x.com/KaranNe00082331"
                     className="bg-white/10 p-2.5 sm:p-3 rounded-lg hover:bg-white/30 transition"
                   >
                     <FiTwitter size={20} className="sm:w-6 sm:h-6" />
@@ -904,7 +904,7 @@ export default function HomePage() {
               </p>
               <div className="flex gap-2 sm:gap-3">
                 <a
-                  href="#"
+                  href="https://x.com/KaranNe00082331"
                   className="bg-gray-800 p-2 rounded-lg hover:bg-gray-700 transition"
                 >
                   <FiTwitter size={18} className="sm:w-5 sm:h-5" />
