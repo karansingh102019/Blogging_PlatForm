@@ -861,26 +861,29 @@ export default function HomePage() {
                     <FiTwitter size={20} className="sm:w-6 sm:h-6" />
                   </a>
 
-                  <a
-                    href="#"
+                  <Link
+                    href="https://www.linkedin.com/in/karan-singh-negi-993136270"
+                    target="_blank"
                     className="bg-white/10 p-2.5 sm:p-3 rounded-lg hover:bg-white/30 transition"
                   >
                     <FiLinkedin size={20} className="sm:w-6 sm:h-6" />
-                  </a>
+                  </Link>
 
-                  <a
-                    href="#"
-                    className="bg-white/10 p-2.5 sm:p-3 rounded-lg hover:bg-white/30 transition"
-                  >
+                  <Link
+                  href="https://www.instagram.com/___karan_negi___?igsh=MXhnemx4c2NrMTYzdQ=="
+                  target="_blank"
+                  className="bg-white/10 p-2.5 sm:p-3 rounded-lg hover:bg-white/30 transition"
+                >
                     <FiInstagram size={20} className="sm:w-6 sm:h-6" />
-                  </a>
+                  </Link>
 
-                  <a
-                    href="#"
+                  <Link
+                    href="https://github.com/karansingh102019"
+                    target="_blank"
                     className="bg-white/10 p-2.5 sm:p-3 rounded-lg hover:bg-white/30 transition"
                   >
                     <FiGithub size={20} className="sm:w-6 sm:h-6" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -906,18 +909,27 @@ export default function HomePage() {
                 >
                   <FiTwitter size={18} className="sm:w-5 sm:h-5" />
                 </a>
-                <a
-                  href="#"
+                <Link
+                  href="https://www.linkedin.com/in/karan-singh-negi-993136270"
+                  target="_blank"
                   className="bg-gray-800 p-2 rounded-lg hover:bg-gray-700 transition"
                 >
                   <FiLinkedin size={18} className="sm:w-5 sm:h-5" />
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  href="https://www.instagram.com/___karan_negi___?igsh=MXhnemx4c2NrMTYzdQ=="
+                  target="_blank"
                   className="bg-gray-800 p-2 rounded-lg hover:bg-gray-700 transition"
                 >
                   <FiInstagram size={18} className="sm:w-5 sm:h-5" />
-                </a>
+                </Link>
+                <Link
+                  href="https://github.com/karansingh102019"
+                  target="_blank"
+                  className="bg-gray-800 p-2 rounded-lg hover:bg-gray-700 transition"
+                >
+                  <FiGithub size={18} className="sm:w-5 sm:h-5" />
+                </Link>
               </div>
             </div>
 
@@ -995,7 +1007,7 @@ export default function HomePage() {
 
           {/* Bottom Bar */}
           <div className="border-t border-gray-800 pt-6 sm:pt-8 text-center text-gray-400 text-xs sm:text-sm">
-            <p>2025 Nexus. All rights reserved. Made in India</p>
+            <p>© 2025 Nexus. Made in India. By Karan Singh Negi.</p>
           </div>
         </div>
       </footer>

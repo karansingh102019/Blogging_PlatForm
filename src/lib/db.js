@@ -5,10 +5,11 @@ let connection;
 export async function getDB() {
   if (!connection) {
     connection = await mysql.createPool({
-      host: "localhost",
+      host: "shinkansen.proxy.rlwy.net",
+      port:"18717",
       user: "root",
-      password: "",
-      database: "blog_platform",
+      password: "OuRnwjCzUwfIVzpZrtBWYMOUvFhjgbYO",
+      database: "railway",
     });
   }
   return connection;

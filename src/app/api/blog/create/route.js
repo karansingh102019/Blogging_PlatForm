@@ -1,3 +1,5 @@
+// api/blog/create/route.js
+
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { getDB } from "@/lib/db";
@@ -10,20 +12,26 @@ export async function POST(req) {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const { title, description, content, thumbnail, published } = await req.json();
+    const { title, description, content, thumbnail, category, published } = await req.json();
+
+    // Validation
+    if (!category) {
+      return NextResponse.json({ error: "Category is required" }, { status: 400 });
+    }
 
     const db = await getDB();
 
     await db.query(
       `
-      INSERT INTO blogs (title, description, content, thumbnail, authorId, published)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO blogs (title, description, content, thumbnail, category, authorId, published)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
       `,
       [
         title,
         description,
         content,
         thumbnail,
+        category, 
         decoded.id,
         published ? 1 : 0
       ]

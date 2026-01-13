@@ -18,6 +18,7 @@ import {
   FiImage,
   FiFileText,
   FiType,
+  FiTag,
 } from "react-icons/fi";
 
 import GradientText from "@/app/components/GradientText";
@@ -37,8 +38,39 @@ const greatVibes = Great_Vibes({
 const SunEditor = dynamic(() => import("suneditor-react"), { ssr: false });
 import "suneditor/dist/css/suneditor.min.css";
 
+// ✅ CATEGORIES LIST
+const CATEGORIES = [
+  "Technology",
+  "Programming",
+  "Web Development",
+  "Mobile Development",
+  "Data Science",
+  "Machine Learning",
+  "Artificial Intelligence",
+  "Cybersecurity",
+  "Cloud Computing",
+  "DevOps",
+  "Design",
+  "UI/UX",
+  "Business",
+  "Marketing",
+  "Finance",
+  "Lifestyle",
+  "Health & Fitness",
+  "Travel",
+  "Food",
+  "Entertainment",
+  "Education",
+  "Personal Development",
+  "News",
+  "Sports",
+  "Gaming",
+  "Science",
+  "Other"
+];
+
 export default function CreateBlogClient() {
-  const searchParams = useSearchParams(); // ✅ NOW SAFE
+  const searchParams = useSearchParams();
   const router = useRouter();
   const editId = searchParams.get("edit");
 
@@ -47,6 +79,9 @@ export default function CreateBlogClient() {
   const [content, setContent] = useState("");
   const [thumbnail, setThumbnail] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [category, setCategory] = useState("");
+  const [filteredCategories, setFilteredCategories] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loadingBlog, setLoadingBlog] = useState(false);
@@ -66,21 +101,60 @@ export default function CreateBlogClient() {
         setContent(data.content || "");
         setThumbnail(data.thumbnail || null);
         setPreview(data.thumbnail || null);
+        setCategory(data.category || "");
       })
       .finally(() => setLoadingBlog(false));
   }, [editId]);
+
+  // ✅ HANDLE CATEGORY INPUT CHANGE
+  const handleCategoryChange = (e) => {
+    const value = e.target.value;
+    setCategory(value);
+
+    if (value.trim() === "") {
+      setFilteredCategories([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    // Filter categories based on input
+    const filtered = CATEGORIES.filter((cat) =>
+      cat.toLowerCase().includes(value.toLowerCase())
+    );
+
+    setFilteredCategories(filtered);
+    setShowSuggestions(true);
+  };
+
+  // ✅ SELECT CATEGORY FROM SUGGESTIONS
+  const selectCategory = (cat) => {
+    setCategory(cat);
+    setShowSuggestions(false);
+    setFilteredCategories([]);
+  };
+
+  // ✅ CLOSE SUGGESTIONS WHEN CLICKING OUTSIDE
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (!e.target.closest('.category-container')) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
   // IMAGE UPLOAD
   const handleThumbnail = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith("image/")) {
       alert("Please upload an image file");
       return;
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("Image size should be less than 5MB");
       return;
@@ -132,6 +206,11 @@ export default function CreateBlogClient() {
       return;
     }
 
+    if (!category.trim()) {
+      alert("Please enter or select a category");
+      return;
+    }
+
     setLoading(true);
 
     const url = editId ? "/api/blog/edit" : "/api/blog/create";
@@ -148,6 +227,7 @@ export default function CreateBlogClient() {
           description,
           content,
           thumbnail,
+          category: category.trim(),
           published: publish,
         }),
       });
@@ -268,7 +348,6 @@ export default function CreateBlogClient() {
                   className="object-cover"
                 />
 
-                {/* Remove Button */}
                 <button
                   onClick={removeThumbnail}
                   className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-red-500 text-white p-2 sm:p-3 rounded-full hover:bg-red-600 transition shadow-lg"
@@ -277,7 +356,6 @@ export default function CreateBlogClient() {
                   <FiX size={16} className="sm:w-5 sm:h-5" />
                 </button>
 
-                {/* Uploading Overlay */}
                 {uploading && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
                     <div className="bg-white px-3 py-2 sm:px-6 sm:py-4 rounded-lg flex items-center gap-2 sm:gap-3 mx-2">
@@ -313,6 +391,64 @@ export default function CreateBlogClient() {
             <p className="text-xs sm:text-sm text-red-400 mt-2">
               <span className="font-medium">Tip:</span> Use a high-quality image
               (recommended: 1200x630px)
+            </p>
+          </div>
+
+          {/* ✅ CATEGORY INPUT WITH AUTOCOMPLETE */}
+          <div className="mb-8 relative category-container">
+            <label className="block text-lg font-semibold text-gray-300 mb-4 flex items-center gap-2">
+              <FiTag className="text-blue-600" size={22} />
+              Category *
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={category}
+                onChange={handleCategoryChange}
+                onFocus={() => {
+                  if (category) {
+                    const filtered = CATEGORIES.filter((cat) =>
+                      cat.toLowerCase().includes(category.toLowerCase())
+                    );
+                    setFilteredCategories(filtered);
+                    setShowSuggestions(true);
+                  }
+                }}
+                placeholder="Type to search or enter custom category..."
+                className="w-full text-gray-800 bg-[#ebebeb] px-6 py-4 border-2 border-gray-300 rounded-xl transition text-lg focus:border-blue-500 focus:outline-none"
+                maxLength={50}
+              />
+
+              {/* Suggestions Dropdown */}
+              {showSuggestions && filteredCategories.length > 0 && (
+                <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-300 rounded-xl shadow-2xl max-h-60 overflow-y-auto">
+                  {filteredCategories.map((cat, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => selectCategory(cat)}
+                      className="px-6 py-3 hover:bg-blue-50 cursor-pointer transition flex items-center gap-2 border-b border-gray-100 last:border-b-0"
+                    >
+                      <FiTag className="text-blue-600" size={16} />
+                      <span className="text-gray-800 font-medium">{cat}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* No matches found */}
+              {showSuggestions && category && filteredCategories.length === 0 && (
+                <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-300 rounded-xl shadow-2xl p-4">
+                  <p className="text-gray-600 text-center">
+                    <span className="font-semibold text-green-600">✓</span> No matching categories found. 
+                    <br />
+                    <span className="text-sm">You can use <span className="font-bold text-blue-600">{category}</span> as a custom category!</span>
+                  </p>
+                </div>
+              )}
+            </div>
+
+            <p className="text-xs sm:text-sm text-blue-400 mt-2">
+              <span className="font-medium">Tip:</span> Start typing to see suggestions, or create your own custom category
             </p>
           </div>
 
