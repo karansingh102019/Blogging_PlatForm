@@ -1,3 +1,5 @@
+// app/blog/[id]/page.js
+
 "use client";
 
 import { use, useEffect, useState } from "react";
@@ -37,7 +39,7 @@ const greatVibes = Great_Vibes({
 });
 
 export default function BlogDetail({ params }) {
-  const { slug } = use(params); // Changed from 'id' to 'slug'
+  const { id } = use(params); // Changed from 'slug' to 'id'
 
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -79,8 +81,8 @@ export default function BlogDetail({ params }) {
           headers["X-Guest-Id"] = guestIdFromStorage;
         }
 
-        // Changed endpoint to use slug
-        const res = await fetch(`/api/blog/${slug}`, { headers });
+        // Changed endpoint to use id
+        const res = await fetch(`/api/blog/${id}`, { headers });
 
         if (!res.ok) {
           setBlog(null);
@@ -102,7 +104,7 @@ export default function BlogDetail({ params }) {
     };
 
     fetchBlog();
-  }, [slug]);
+  }, [id]);
 
   const handleLike = async () => {
     if (!guestId || !blog) return;
@@ -112,7 +114,6 @@ export default function BlogDetail({ params }) {
       const headers = { "Content-Type": "application/json" };
       if (token) headers.Authorization = `Bearer ${token}`;
 
-      // Use blog.id for API calls (backend still uses ID internally)
       const res = await fetch(`/api/blog/${blog.id}/like`, {
         method: "POST",
         headers,
