@@ -267,7 +267,7 @@ export default function CreateBlogClient() {
         <DashboardNav />
       </div>
       {/* Breadcrumb Navigation */}
-      <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
+      <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-md sm:backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
         <div className="max-w-full px-2 sm:px-4 md:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-400 overflow-x-auto scrollbar-hide">
             <Link
@@ -303,7 +303,7 @@ export default function CreateBlogClient() {
       </div>
 
       {/* Page Header */}
-      <div className="bg-black/40 backdrop-blur-xl border-b px-2 sm:px-4 md:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
+      <div className="bg-black/40 backdrop-blur-md sm:backdrop-blur-xl border-b px-2 sm:px-4 md:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
         <div className="max-w-7xl mx-auto">
           <h1
             className={`${greatVibes.className} text-2xl xs:text-3xl sm:text-4xl md:text-5xl font-bold text-gray-300 mt-1 sm:mt-2 flex items-center gap-2 sm:gap-3`}
@@ -326,7 +326,7 @@ export default function CreateBlogClient() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-8">
-        <div className="bg-black/40 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-6 md:p-8">
+        <div className="bg-black/40 backdrop-blur-md sm:backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl p-3 sm:p-6 md:p-8">
           {/* Thumbnail Section */}
           <div className="mb-6 sm:mb-8">
             <label className="block text-base sm:text-lg font-semibold text-gray-300 mb-3 sm:mb-4 flex items-center gap-2">
@@ -346,6 +346,9 @@ export default function CreateBlogClient() {
                   fill
                   alt="Thumbnail Preview"
                   className="object-cover"
+                  quality={75}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  loading="lazy"
                 />
 
                 <button
@@ -368,7 +371,7 @@ export default function CreateBlogClient() {
                 )}
               </div>
             ) : (
-              <label className="block w-full h-48 xs:h-56 sm:h-64 md:h-80 border-2 sm:border-4 border-dashed border-gray-300 rounded-lg sm:rounded-xl hover:border-blue-400 transition cursor-pointer bg-black/20 backdrop-blur-xl">
+              <label className="block w-full h-48 xs:h-56 sm:h-64 md:h-80 border-2 sm:border-4 border-dashed border-gray-300 rounded-lg sm:rounded-xl hover:border-blue-400 transition cursor-pointer bg-black/20 backdrop-blur-md sm:backdrop-blur-xl">
                 <div className="h-full flex flex-col items-center justify-center text-gray-500 px-2">
                   <FiUpload className="text-4xl sm:text-5xl md:text-6xl mb-2 sm:mb-4 text-gray-400" />
                   <p className="text-sm sm:text-base md:text-lg font-medium mb-1 sm:mb-2 text-center">
@@ -421,7 +424,7 @@ export default function CreateBlogClient() {
 
               {/* Suggestions Dropdown */}
               {showSuggestions && filteredCategories.length > 0 && (
-                <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-300 rounded-xl shadow-2xl max-h-60 overflow-y-auto">
+                <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-300 rounded-xl shadow-lg sm:shadow-2xl max-h-60 overflow-y-auto">
                   {filteredCategories.map((cat, idx) => (
                     <div
                       key={idx}
@@ -437,7 +440,7 @@ export default function CreateBlogClient() {
 
               {/* No matches found */}
               {showSuggestions && category && filteredCategories.length === 0 && (
-                <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-300 rounded-xl shadow-2xl p-4">
+                <div className="absolute z-50 w-full mt-2 bg-white border-2 border-gray-300 rounded-xl shadow-lg sm:shadow-2xl p-4">
                   <p className="text-gray-600 text-center">
                     <span className="font-semibold text-green-600">✓</span> No matching categories found. 
                     <br />
@@ -568,7 +571,7 @@ export default function CreateBlogClient() {
         </div>
 
         {/* Tips Section */}
-        <div className="mt-6 sm:mt-8 bg-black/20 backdrop-blur-xl rounded-lg sm:rounded-xl p-4 sm:p-6">
+        <div className="mt-6 sm:mt-8 bg-black/20 backdrop-blur-md sm:backdrop-blur-xl rounded-lg sm:rounded-xl p-4 sm:p-6">
           <h3
             className={`${greatVibes.className} text-2xl xs:text-3xl sm:text-4xl font-bold text-gray-300 mb-2 sm:mb-3`}
           >

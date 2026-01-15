@@ -154,7 +154,7 @@ export default function SavedBlogsPage() {
                    <DashboardNav />
                  </div>
            {/* Breadcrumb Navigation */}
-           <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
+           <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-md sm:backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
         <div className="max-w-full px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-400 overflow-x-auto">
             <Link
@@ -182,7 +182,7 @@ export default function SavedBlogsPage() {
       </div>
 
       {/* Page Header */}
-      <div className="bg-black/40 backdrop-blur-xl border-b px-3 sm:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
+      <div className="bg-black/40 backdrop-blur-md sm:backdrop-blur-xl border-b px-3 sm:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
         <div className="max-w-7xl mx-auto">
           <h1
             className={`${greatVibes.className} text-3xl sm:text-4xl lg:text-5xl mt-2 font-bold text-gray-300 flex items-center gap-2 sm:gap-3`}
@@ -216,7 +216,7 @@ export default function SavedBlogsPage() {
                 placeholder="Search saved blogs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 bg-white/10 backdrop-blur-xl border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-300 placeholder-gray-400"
+                className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-2.5 sm:py-3 bg-white/10 backdrop-blur-md sm:backdrop-blur-xl border-2 border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base text-gray-300 placeholder-gray-400"
               />
             </div>
 
@@ -233,7 +233,7 @@ export default function SavedBlogsPage() {
 
         {/* Empty State */}
         {savedBlogs.length === 0 ? (
-          <div className="bg-black/20 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-lg p-8 sm:p-12 text-center">
+          <div className="bg-black/20 backdrop-blur-md sm:backdrop-blur-xl border border-gray-200 rounded-2xl shadow-lg p-8 sm:p-12 text-center">
             <div className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 bg-blue-600/20 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
               <FiBookmark className="text-blue-600 sm:w-10 sm:h-10 lg:w-12 lg:h-12" size={32}  />
             </div>
@@ -256,7 +256,7 @@ export default function SavedBlogsPage() {
           <>
             {/* No Search Results */}
             {filteredBlogs.length === 0 ? (
-              <div className="bg-black/20 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-lg p-8 sm:p-12 text-center">
+              <div className="bg-black/20 backdrop-blur-md sm:backdrop-blur-xl border border-gray-200 rounded-2xl shadow-lg p-8 sm:p-12 text-center">
                 <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gray-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <FiSearch className="text-gray-400 sm:w-8 sm:h-8 " size={24} />
                 </div>
@@ -271,7 +271,7 @@ export default function SavedBlogsPage() {
                 {filteredBlogs.map((blog) => (
                   <div
                     key={blog.id}
-                    className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-transparent hover:border-blue-500"
+                    className="bg-white/10 backdrop-blur-md sm:backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-transparent hover:border-blue-500"
                   >
                     {/* Thumbnail */}
                     <Link

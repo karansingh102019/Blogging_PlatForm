@@ -36,7 +36,7 @@ export const metadata = {
     siteName: "Nexus Blog",
     images: [
       {
-        url: "/og-image.png", // Add this image to your /public folder
+        url: "", 
         width: 1200,
         height: 630,
         alt: "Nexus Blog Platform",

@@ -8,66 +8,88 @@ export default function BlogCard({
   title,
   desc,
   image,
-  author = "John Doe",
-  avatar = "/avatar.png",
+  author,
+  avatar,
   views = 0,
   likes = 0,
 }) {
+  // ✅ Fallback image agar image empty ho
+  const blogImage = image && image.trim() !== "" 
+    ? image 
+    : "/placeholder-blog.svg"; // Ya koi default image
+
+  const authorAvatar = avatar && avatar.trim() !== "" 
+    ? avatar 
+    : "/default-avatar.svg";
+
   return (
     <div className="
-       bg-black/20 backdrop-blur-lg rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300
+       bg-black/20 backdrop-blur-md sm:backdrop-blur-lg rounded-xl overflow-hidden shadow-md hover:shadow-lg sm:hover:shadow-xl transition-all duration-300
        hover:border-blue-400 cursor-pointer group
     ">
       
       {/* Thumbnail */}
-      <div className="overflow-hidden h-48">
-        <Image 
-          src={image} 
-          width={500} 
-          height={300} 
-          alt={title}
-          className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500"
-        />
+      <div className="overflow-hidden h-48 bg-gray-800">
+        {blogImage ? (
+          <Image 
+            src={blogImage} 
+            width={500} 
+            height={300} 
+            alt={title || "Blog thumbnail"}
+            className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500"
+            quality={75}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading="lazy"
+            onError={(e) => {
+              e.target.src = "/placeholder-blog.svg"; 
+            }}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-900/50 to-purple-900/50">
+            <span className="text-red-400 text-sm">No Image</span>
+          </div>
+        )}
       </div>
 
       {/* Content */}
       <div className="p-5 space-y-3">
-
         <div className="flex justify-between">
-        {/* Title */}
-        <h2 className="text-xl font-semibold text-gray-300 group-hover:text-gray-100 transition-colors">
-          {title}
-        </h2>
+          {/* Title */}
+          <h2 className="text-xl font-semibold text-gray-300 group-hover:text-gray-100 transition-colors">
+            {title || "Untitled Blog"}
+          </h2>
 
-        {/* Views and Likes Stats */}
-        <div className="flex items-center gap-4 pt-2">
-          <div className="flex items-center gap-1.5 text-blue-500">
-            <FiEye size={16} />
-            <span className="text-xs font-medium">{views.toLocaleString()}</span>
-          </div>
-          <div className="flex items-center gap-1.5 text-red-500">
-            <FiHeart size={16} />
-            <span className="text-xs font-medium">{likes.toLocaleString()}</span>
+          {/* Views and Likes Stats */}
+          <div className="flex items-center gap-4 pt-2">
+            <div className="flex items-center gap-1.5 text-blue-500">
+              <FiEye size={16} />
+              <span className="text-xs font-medium">{views.toLocaleString()}</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-red-500">
+              <FiHeart size={16} />
+              <span className="text-xs font-medium">{likes.toLocaleString()}</span>
+            </div>
           </div>
         </div>
-
-        </div>
-
 
         <p className="text-gray-400 text-sm line-clamp-3">
-          {desc}
+          {desc || "No description available"}
         </p>
-
-        
 
         {/* Author */}
         <div className="flex items-center gap-3 mt-3">
           <Image 
-            src={avatar}
+            src={authorAvatar}
             width={32}
             height={32}
             className="rounded-full w-8 h-8 object-cover border"
-            alt="Author"
+            alt={author || "Author"}
+            quality={75}
+            sizes="32px"
+            loading="lazy"
+            onError={(e) => {
+              e.target.src = "/default-avatar.svg";
+            }}
           />
 
           <div className="text-[13px] leading-tight flex justify-between w-full">
@@ -83,7 +105,6 @@ export default function BlogCard({
             <FiArrowRight size={16} className="group-hover:translate-x-1 transition"/>
           </div>
         </Link>
-
       </div>
     </div>
   );

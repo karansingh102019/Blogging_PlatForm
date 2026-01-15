@@ -25,6 +25,8 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
+  preload: true,
 });
 
 const greatVibes = Great_Vibes({
@@ -138,7 +140,7 @@ export default function DraftsPage() {
       </div>
       
       {/* Breadcrumb Navigation */}
-      <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
+      <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-md sm:backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
         <div className="max-w-full px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-400 overflow-x-auto">
             <Link
@@ -172,7 +174,7 @@ export default function DraftsPage() {
       </div>
 
       {/* Page Header */}
-      <div className="bg-black/40 backdrop-blur-xl border-b px-3 sm:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
+      <div className="bg-black/40 backdrop-blur-md sm:backdrop-blur-xl border-b px-3 sm:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="w-full sm:w-auto">
             <h1
@@ -204,7 +206,7 @@ export default function DraftsPage() {
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
         {drafts.length === 0 ? (
-          <div className="bg-black/20 backdrop-blur-xl border border-gray-20 rounded-2xl shadow-lg p-8 sm:p-12 lg:p-16 text-center">
+          <div className="bg-black/20 backdrop-blur-md sm:backdrop-blur-xl border border-gray-20 rounded-2xl shadow-lg p-8 sm:p-12 lg:p-16 text-center">
             <div className="bg-transparent border border-orange-600 w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
               <FiArchive className="text-orange-600" size={32} />
             </div>
@@ -229,7 +231,7 @@ export default function DraftsPage() {
               {currentDrafts.map((draft) => (
                 <div
                   key={draft.id}
-                  className="bg-white/10 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg overflow-hidden group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-transparent hover:border-orange-500 relative"
+                  className="bg-white/10 backdrop-blur-md sm:backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg overflow-hidden group hover:shadow-lg sm:hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-transparent hover:border-orange-500 relative"
                 >
                   {/* Draft Badge */}
                   <div className="absolute top-3 sm:top-4 right-3 sm:right-4 z-10">

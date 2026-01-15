@@ -6,19 +6,36 @@ import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 gsap.registerPlugin(MotionPathPlugin);
 
 const codingSymbols = [
-  "<article>",
-  "</article>",
-  "<header>",
-  "<footer>",
-  "<section>",
-  "<h1>",
-  "<h2>",
-  "<p>",
-  "<img>",
-  "<a>",
-  "<time>",
-  "<blockquote>",
-  "<figure>",
+  "[ Blog ]",
+  "< Post />",
+  "{ Article }",
+  "[ Draft ]",
+  "< Story />",
+  "{ Write }",
+  "[ Edit ]",
+  "< Publish />",
+  "{ Content }",
+  "[ Author ]",
+  "< Read />",
+  "{ Share }",
+  "[ Comment ]",
+  "< Like />",
+  "{ View }",
+  "[ Save ]",
+  "< Subscribe />",
+  "{ Trending }",
+  "[ Featured ]",
+  "< New />",
+  "{ Popular }",
+  "[ Latest ]",
+  "< Follow />",
+  "{ Category }",
+  "[ Tags ]",
+  "< Search />",
+  "{ Filter }",
+  "[ Archive ]",
+  "< Create />",
+  "{ Update }",
 ];
 
 const techIcons = [
@@ -31,7 +48,7 @@ const techIcons = [
   "SEO",
   "login",
   "Like",
-  "Saved",
+  "Saved"
 ];
 
 export default function PortfolioLoader({ onDone }) {
@@ -101,27 +118,22 @@ export default function PortfolioLoader({ onDone }) {
       className="fixed inset-0 bg-black flex items-center justify-center z-[9999] overflow-hidden"
     >
       {/* Blue Background Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(79, 195, 245, 0.18),transparent_70%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(56,189,248,0.18),transparent_70%)]" />
 
       {/* Grid */}
-      <div
-        className="absolute inset-0 opacity-[0.06]
+      <div className="absolute inset-0 opacity-[0.06]
         bg-[linear-gradient(to_right,#ffffff10_1px,transparent_1px),
         linear-gradient(to_bottom,#ffffff10_1px,transparent_1px)]
-        bg-[size:50px_50px]"
-      />
+        bg-[size:50px_50px]" />
 
       {/* LOGO */}
-      <div
-        ref={logoRef}
-        className="relative flex flex-col items-center select-none"
-      >
+      <div ref={logoRef} className="relative flex flex-col items-center select-none">
         <svg width="230" height="230" viewBox="0 0 200 200" fill="none">
           <path
             id="logo-stroke"
             d="M40 150 L40 60 L70 60 L70 110 L110 60 L150 60
                L150 150 L120 150 L120 100 L85 150 L40 150 Z"
-            stroke="#2c3af8"
+            stroke="#3247e6"
             strokeWidth="7"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -131,9 +143,9 @@ export default function PortfolioLoader({ onDone }) {
         <div
           ref={textRef}
           className="text-sky-300/80 tracking-[0.25em]
-          uppercase font-semibold mt-3"
+          uppercase font-semibold mt-2"
         >
-          Write, Publish, and Inspire
+          Unleash Your Inner Writer
         </div>
       </div>
 
@@ -146,7 +158,7 @@ export default function PortfolioLoader({ onDone }) {
             top: floatItem.top,
             left: floatItem.left,
             animation: `floatTag ${floatItem.duration}s linear infinite`,
-            color: "#0668a9c8",
+            color: "#3247e68c",
             fontSize: "20px",
           }}
         >

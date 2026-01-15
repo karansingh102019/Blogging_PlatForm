@@ -25,7 +25,7 @@ export default function DashboardNav() {
   }, []);
 
   return (
-    <nav className="flex justify-between items-center px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg">
+    <nav className="flex justify-between items-center px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-md sm:backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg">
       {/* LEFT - Hamburger + Title */}
       <div className="flex gap-2 sm:gap-3 items-center">
         {/* Hamburger Menu - Mobile Only */}
@@ -60,6 +60,9 @@ export default function DashboardNav() {
             height={32}
             alt="user"
             className="rounded-full border w-7 h-7 sm:w-7 sm:h-7 md:w-8 md:h-8 shadow cursor-pointer object-cover"
+            quality={75}
+            sizes="(max-width: 768px) 28px, 32px"
+            loading="lazy"
             onError={(e) => {
               e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
                 user?.name || "User"

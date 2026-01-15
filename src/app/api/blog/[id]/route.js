@@ -100,45 +100,33 @@ export async function GET(req, { params }) {
 
     const blog = blogs[0];
 
-    // Get total likes count (with error handling)
-    try {
-      const [likesCount] = await db.query(
-        "SELECT COUNT(*) as total FROM blog_like WHERE blogId = ?",
-        [id]
-      );
-      blog.likes = likesCount[0]?.total || 0;
-    } catch (err) {
-      console.log("Likes table might not exist:", err.message);
-      blog.likes = 0;
-    }
+    // 🔥 PARALLEL DATABASE QUERIES for better performance
+    const queries = [];
 
-    // Check if current user liked this blog
+    // Get total likes count
+    queries.push(
+      db.query("SELECT COUNT(*) as total FROM blog_like WHERE blogId = ?", [id])
+        .then(([result]) => ({ type: 'likesCount', data: result }))
+        .catch(() => ({ type: 'likesCount', data: [{ total: 0 }] }))
+    );
+
+    // Check if current user liked/saved this blog
     if (userId) {
-      // Logged in user
       const userIdentifier = `user_${userId}`;
       
-      try {
-        const [userLike] = await db.query(
-          "SELECT id FROM blog_like WHERE blogId = ? AND userId = ?",
-          [id, userIdentifier]
-        );
-        blog.isLiked = userLike.length > 0;
-      } catch (err) {
-        console.log("User like check failed:", err.message);
-        blog.isLiked = false;
-      }
+      // User like check
+      queries.push(
+        db.query("SELECT id FROM blog_like WHERE blogId = ? AND userId = ?", [id, userIdentifier])
+          .then(([result]) => ({ type: 'userLike', data: result }))
+          .catch(() => ({ type: 'userLike', data: [] }))
+      );
 
-      // Check if user saved this blog
-      try {
-        const [userSave] = await db.query(
-          "SELECT id FROM blog_save WHERE blogId = ? AND userId = ?",
-          [id, userId]
-        );
-        blog.isSaved = userSave.length > 0;
-      } catch (err) {
-        console.log("User save check failed:", err.message);
-        blog.isSaved = false;
-      }
+      // User save check
+      queries.push(
+        db.query("SELECT id FROM blog_save WHERE blogId = ? AND userId = ?", [id, userId])
+          .then(([result]) => ({ type: 'userSave', data: result }))
+          .catch(() => ({ type: 'userSave', data: [] }))
+      );
     } else {
       // Guest user - check using guestId from header
       const guestIdFromHeader = req.headers.get("X-Guest-Id");
@@ -146,23 +134,38 @@ export async function GET(req, { params }) {
       if (guestIdFromHeader) {
         const guestIdentifier = `guest_${guestIdFromHeader}`;
         
-        try {
-          const [guestLike] = await db.query(
-            "SELECT id FROM blog_like WHERE blogId = ? AND userId = ?",
-            [id, guestIdentifier]
-          );
-          blog.isLiked = guestLike.length > 0;
-          console.log("Guest like check:", blog.isLiked, "for", guestIdentifier);
-        } catch (err) {
-          console.log("Guest like check failed:", err.message);
-          blog.isLiked = false;
-        }
-      } else {
-        blog.isLiked = false;
+        queries.push(
+          db.query("SELECT id FROM blog_like WHERE blogId = ? AND userId = ?", [id, guestIdentifier])
+            .then(([result]) => ({ type: 'guestLike', data: result }))
+            .catch(() => ({ type: 'guestLike', data: [] }))
+        );
       }
-      
-      blog.isSaved = false;
     }
+
+    // Execute all queries in parallel
+    const results = await Promise.all(queries);
+
+    // Process results
+    results.forEach((result) => {
+      switch (result.type) {
+        case 'likesCount':
+          blog.likes = result.data[0]?.total || 0;
+          break;
+        case 'userLike':
+          blog.isLiked = result.data.length > 0;
+          break;
+        case 'userSave':
+          blog.isSaved = result.data.length > 0;
+          break;
+        case 'guestLike':
+          blog.isLiked = result.data.length > 0;
+          break;
+      }
+    });
+
+    // Set defaults if not set
+    if (blog.isLiked === undefined) blog.isLiked = false;
+    if (blog.isSaved === undefined) blog.isSaved = false;
 
     return NextResponse.json(blog);
   } catch (err) {

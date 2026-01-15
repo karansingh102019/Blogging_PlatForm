@@ -29,11 +29,15 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
+  preload: true,
 });
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
   weight: "400",
+  display: "swap",
+  preload: true,
 });
 
 export default function ProfilePage() {
@@ -181,7 +185,7 @@ export default function ProfilePage() {
                     <DashboardNav/>
                   </div>
             {/* Breadcrumb Navigation */}
-            <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
+            <div className="hidden lg:flex items-center gap-2 px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 backdrop-blur-md sm:backdrop-blur-xl bg-black/30 mb-4 sm:mb-5 md:mb-6 shadow-sm sticky z-40 top-0 rounded-bl-lg text-gray-400 text-sm">
         <div className="max-w-full px-3 sm:px-6 py-3 sm:py-4">
           <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-400 overflow-x-auto">
             <Link
@@ -211,7 +215,7 @@ export default function ProfilePage() {
       {/* Main Content - Full Width */}
       <div className="w-full">
         {/* Page Header */}
-        <div className="bg-black/40 backdrop-blur-xl border-b px-3 sm:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
+        <div className="bg-black/40 backdrop-blur-md sm:backdrop-blur-xl border-b px-3 sm:px-6 py-4 sm:py-6 rounded-bl-lg rounded-tl-lg">
           <div className="max-w-7xl mx-auto">
             <h1
               className={`${greatVibes.className} text-3xl sm:text-4xl lg:text-5xl mt-2 font-bold text-gray-300 flex items-center gap-2 sm:gap-3`}
@@ -232,7 +236,7 @@ export default function ProfilePage() {
 
         {/* Profile Card - Full Width */}
         <div className="max-w-7xl mx-auto px-3 sm:pr-6 py-4 sm:py-8">
-          <div className="bg-black/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-black/20 backdrop-blur-md sm:backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-xl overflow-hidden">
             {/* COVER PHOTO SECTION */}
             <div className="relative w-full h-48 sm:h-64 lg:h-80 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30">
               {cover ? (
@@ -241,6 +245,8 @@ export default function ProfilePage() {
                   fill
                   alt="Cover"
                   className="object-cover"
+                  quality={75}
+                  sizes="100vw"
                   priority
                 />
               ) : (
@@ -300,7 +306,10 @@ export default function ProfilePage() {
                         width={200}
                         height={200}
                         alt="Avatar"
-                        className="rounded-full border-4 border-white shadow-2xl w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 object-cover"
+                        className="rounded-full border-4 border-white shadow-lg sm:shadow-2xl w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 object-cover"
+                        quality={75}
+                        sizes="(max-width: 768px) 128px, (max-width: 1024px) 160px, 192px"
+                        loading="lazy"
                       />
                     ) : (
                       <div className="w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 rounded-full border-4 sm:border-8 border-white shadow-2xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-4xl sm:text-5xl lg:text-6xl font-bold">

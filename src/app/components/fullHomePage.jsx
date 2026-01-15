@@ -30,11 +30,15 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
+  preload: true,
 });
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
   weight: "400",
+  display: "swap",
+  preload: true,
 });
 
 export default function HomePage() {
@@ -123,7 +127,7 @@ export default function HomePage() {
       {/* HOME SECTION */}
       <section
         id="home"
-        className="relative w-full px-4 sm:px-6 md:px-8 lg:px-16 xl:px-32 py-16 sm:py-20 md:py-24 lg:py-32 flex items-center bg-black justify-center overflow-hidden min-h-screen"
+        className="relative w-full px-4 sm:px-6  md:px-8 lg:px-16 xl:px-32 py-16 sm:py-20 md:py-24 lg:py-32 flex items-center bg-black justify-center overflow-hidden"
       >
         <div className="absolute inset-0 z-0 pointer-events-none">
           <FloatingLines interactive={false} />
@@ -133,7 +137,7 @@ export default function HomePage() {
 
         <div className="max-w-6xl mx-auto text-center text-white relative z-10 w-full">
           <h1
-            className={`${greatVibes.className} text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl font-extrabold px-4`}
+            className={`${greatVibes.className} text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-9xl font-extrabold mt-10 px-4`}
           >
             <SplitText
               text={`Share Your Thoughts With the world`}
@@ -175,7 +179,7 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 sm:gap-5 justify-center items-center w-full sm:w-auto">
               <Link
                 href="/auth/signup"
-                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white text-purple-600 rounded-full font-bold text-base sm:text-lg hover:bg-gray-100 transition shadow-2xl hover:scale-105 transform duration-300"
+                className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white text-purple-600 rounded-full font-bold text-base sm:text-lg hover:bg-gray-100 transition shadow-lg sm:shadow-2xl hover:scale-105 transform duration-300"
               >
                 <GradientText
                   colors={[
@@ -278,7 +282,7 @@ export default function HomePage() {
               thickness={0}
               style={{ borderRadius: 16 }}
             >
-              <div className="group relative bg-black/30 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 transform overflow-hidden border-2 border-transparent hover:border-blue-400 h-full">
+              <div className="group relative bg-black/30 backdrop-blur-lg sm:backdrop-blur-2xl p-6 sm:p-8 rounded-3xl shadow-xl hover:shadow-lg sm:shadow-2xl transition-all duration-500 transform overflow-hidden border-2 border-transparent hover:border-blue-400 h-full">
                 <div className="relative z-10">
                   <div className="relative mb-10 sm:mb-14">
                     <div className="relative bg-gradient-to-br from-blue-400 to-blue-600 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-500 shadow-lg">
@@ -335,7 +339,7 @@ export default function HomePage() {
               thickness={0}
               style={{ borderRadius: 16 }}
             >
-              <div className="group relative bg-black/30 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border-2 border-transparent hover:border-green-400 h-full">
+              <div className="group relative bg-black/30 backdrop-blur-lg sm:backdrop-blur-2xl p-6 sm:p-8 rounded-3xl shadow-xl hover:shadow-lg sm:shadow-2xl transition-all duration-500 overflow-hidden border-2 border-transparent hover:border-green-400 h-full">
                 <div className="relative z-10">
                   <div className="relative mb-10 sm:mb-14">
                     <div className="relative bg-gradient-to-br from-green-400 to-green-600 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-500 shadow-lg">
@@ -391,7 +395,7 @@ export default function HomePage() {
               thickness={0}
               style={{ borderRadius: 16 }}
             >
-              <div className="group relative bg-black/30 backdrop-blur-2xl p-6 sm:p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-500 overflow-hidden border-2 border-transparent hover:border-purple-400 h-full">
+              <div className="group relative bg-black/30 backdrop-blur-lg sm:backdrop-blur-2xl p-6 sm:p-8 rounded-3xl shadow-xl hover:shadow-lg sm:shadow-2xl transition-all duration-500 overflow-hidden border-2 border-transparent hover:border-purple-400 h-full">
                 <div className="relative z-10">
                   <div className="relative mb-10 sm:mb-14">
                     <div className="relative bg-gradient-to-br from-purple-400 to-purple-600 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center transform group-hover:rotate-6 group-hover:scale-110 transition-all duration-500 shadow-lg">
@@ -556,7 +560,7 @@ export default function HomePage() {
               </Link>
             </div>
 
-            <div className="bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-cyan-500/10 backdrop-blur-xl p-6 sm:p-8 rounded-2xl border-2 border-white/20">
+            <div className="bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-cyan-500/10 backdrop-blur-md sm:backdrop-blur-xl p-6 sm:p-8 rounded-2xl border-2 border-white/20">
               <h3 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
                 Our Values
               </h3>
@@ -634,7 +638,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="max-w-9xl mx-auto mt-12 sm:mt-16 md:mt-20">
-            <div className="text-center bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-cyan-500/10 backdrop-blur-xl p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl border border-white/20">
+            <div className="text-center bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-cyan-500/10 backdrop-blur-md sm:backdrop-blur-xl p-6 sm:p-8 md:p-12 rounded-2xl sm:rounded-3xl border border-white/20">
               <GradientText
                 colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
                 animationSpeed={8}

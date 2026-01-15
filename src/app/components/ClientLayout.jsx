@@ -20,7 +20,7 @@ export default function ClientShell({ children }) {
     <>
       {/* APP CONTENT (ALWAYS MOUNTED) */}
       <div
-        className={`min-h-screen transition-opacity duration-700 ${
+        className={`transition-opacity duration-700 ${
           loading ? "opacity-0" : "opacity-100"
         }`}
       >

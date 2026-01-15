@@ -218,3 +218,19 @@ html {
 .animate-gradient {
   animation: gradient-move var(--speed, 8s) ease infinite;
 }
+
+/* Mobile Performance Optimizations */
+@media (max-width: 768px) {
+  .shadow-2xl {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1) !important;
+  }
+  
+  * {
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+  }
+  
+  .backdrop-blur-xl, .backdrop-blur-2xl {
+    will-change: transform;
+  }
+}

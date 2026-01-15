@@ -16,56 +16,56 @@ export default function DashboardHome() {
 
   // 🔁 LOAD DASHBOARD DATA (REAL TIME)
   useEffect(() => {
+    const loadDashboard = async () => {
+      try {
+        // 👤 PROFILE
+        const profileRes = await fetch("/api/profile", {
+          credentials: "include",
+        });
+        const profileData = await profileRes.json();
+        if (profileData?.name) {
+          setUserName(profileData.name);
+        }
+
+        // 📝 PUBLISHED BLOGS (myblog API)
+        const blogRes = await fetch("/api/blog/myblog", {
+          credentials: "include",
+        });
+        const blogData = await blogRes.json();
+
+        const publishedList = Array.isArray(blogData)
+          ? blogData
+          : blogData.blogs || blogData.data || [];
+
+        // 📝 DRAFT BLOGS
+        const draftRes = await fetch("/api/blog/draft", {
+          credentials: "include",
+        });
+        const draftData = await draftRes.json();
+
+        const draftList = Array.isArray(draftData)
+          ? draftData
+          : draftData.blogs || draftData.data || [];
+
+        // 📊 STATS
+        const published = publishedList.length;
+        const drafts = draftList.length;
+        const total = published + drafts;
+
+        setStats({ total, drafts, published });
+
+        // Recent blogs: combine both (published + drafts) and show latest 5
+        const allBlogs = [...publishedList, ...draftList].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        setBlogs(allBlogs.slice(0, 5));
+      } catch (err) {
+        console.error("Dashboard API error:", err);
+      }
+    };
+
     loadDashboard();
   }, []);
-
-  const loadDashboard = async () => {
-    try {
-      // 👤 PROFILE
-      const profileRes = await fetch("/api/profile", {
-        credentials: "include",
-      });
-      const profileData = await profileRes.json();
-      if (profileData?.name) {
-        setUserName(profileData.name);
-      }
-
-      // 📝 PUBLISHED BLOGS (myblog API)
-      const blogRes = await fetch("/api/blog/myblog", {
-        credentials: "include",
-      });
-      const blogData = await blogRes.json();
-
-      const publishedList = Array.isArray(blogData)
-        ? blogData
-        : blogData.blogs || blogData.data || [];
-
-      // 📝 DRAFT BLOGS
-      const draftRes = await fetch("/api/blog/draft", {
-        credentials: "include",
-      });
-      const draftData = await draftRes.json();
-
-      const draftList = Array.isArray(draftData)
-        ? draftData
-        : draftData.blogs || draftData.data || [];
-
-      // 📊 STATS
-      const published = publishedList.length;
-      const drafts = draftList.length;
-      const total = published + drafts;
-
-      setStats({ total, drafts, published });
-
-      // Recent blogs: combine both (published + drafts) and show latest 5
-      const allBlogs = [...publishedList, ...draftList].sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-      setBlogs(allBlogs.slice(0, 5));
-    } catch (err) {
-      console.error("Dashboard API error:", err);
-    }
-  };
 
   const deleteBlog = async (id) => {
     if (!confirm("Delete this blog?")) return;
@@ -94,7 +94,7 @@ export default function DashboardHome() {
           <div className="lg:col-span-8 space-y-6">
             
             {/* Hero Card */}
-            <div className="relative rounded-xl shadow-xl overflow-hidden backdrop-blur-xl bg-gradient-to-r from-blue-500/20 to-purple-600/20 p-6 lg:p-8">
+            <div className="relative rounded-xl shadow-xl overflow-hidden backdrop-blur-md sm:backdrop-blur-xl bg-gradient-to-r from-blue-500/20 to-purple-600/20 p-6 lg:p-8">
               <div className="flex flex-col lg:flex-row items-center lg:items-start gap-6 lg:gap-8">
                 
                 {/* Text Content */}
@@ -115,20 +115,23 @@ export default function DashboardHome() {
                 </div>
 
                 {/* Image - Hidden on mobile, shown on large screens */}
-                <div className="hidden  flex-shrink-0">
+                <div className="hidden lg:block flex-shrink-0">
                   <Image
                     src="/Cht.png"
                     alt="Dashboard illustration"
                     width={300}
                     height={300}
                     className="w-64 xl:w-80 h-auto object-contain"
+                    quality={75}
+                    sizes="(max-width: 1280px) 256px, 320px"
+                    loading="lazy"
                   />
                 </div>
               </div>
             </div>
 
             {/* Recent Blogs Section */}
-            <div className="backdrop-blur-xl bg-gradient-to-r from-blue-500/20 to-purple-600/20 p-5 sm:p-6 rounded-xl shadow-xl">
+            <div className="backdrop-blur-md sm:backdrop-blur-xl bg-gradient-to-r from-blue-500/20 to-purple-600/20 p-5 sm:p-6 rounded-xl shadow-xl">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <h2 className="text-xl sm:text-2xl text-gray-300 font-semibold">
                   My Recent Blogs
@@ -152,7 +155,7 @@ export default function DashboardHome() {
                 {blogs.map((blog) => (
                   <div
                     key={blog.id}
-                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-black/60 backdrop-blur-xl p-4 rounded-xl shadow hover:shadow-lg transition"
+                    className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 bg-black/60 backdrop-blur-md sm:backdrop-blur-xl p-4 rounded-xl shadow hover:shadow-lg transition"
                   >
                     {/* Left section */}
                     <div className="flex items-center gap-3 sm:gap-4 flex-1 min-w-0">
@@ -162,6 +165,9 @@ export default function DashboardHome() {
                         height={48}
                         alt="blog thumbnail"
                         className="rounded-full w-10 h-10 sm:w-12 sm:h-12 object-cover flex-shrink-0"
+                        quality={75}
+                        sizes="(max-width: 640px) 40px, 48px"
+                        loading="lazy"
                       />
 
                       <div className="flex-1 min-w-0">
@@ -197,7 +203,7 @@ export default function DashboardHome() {
 
           {/* RIGHT COLUMN - Stats Cards */}
           <div className="lg:col-span-4 lg:sticky lg:top-24 h-fit">
-            <div className="space-y-4 bg-gradient-to-r from-blue-500/20 to-purple-600/20 backdrop-blur-xl shadow-xl rounded-xl p-5">
+            <div className="space-y-4 bg-gradient-to-r from-blue-500/20 to-purple-600/20 backdrop-blur-md sm:backdrop-blur-xl shadow-xl rounded-xl p-5">
               <h3 className="text-lg sm:text-xl font-bold text-gray-300 mb-4 pb-3 border-b-2 border-gray-200">
                 Blog Statistics
               </h3>
@@ -206,7 +212,7 @@ export default function DashboardHome() {
               <div className="grid grid-cols-2 lg:grid-cols-1 gap-4">
                 
                 {/* Published Card */}
-                <div className="bg-black/50 backdrop-blur-xl border-y-4 border-green-600 p-4 rounded-lg hover:shadow-md transition">
+                <div className="bg-black/50 backdrop-blur-md sm:backdrop-blur-xl border-y-4 border-green-600 p-4 rounded-lg hover:shadow-md transition">
                   <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-3">
                     <div className="text-center lg:text-left">
                       <p className="text-green-700 text-xs font-semibold mb-1 uppercase tracking-wide">
@@ -236,7 +242,7 @@ export default function DashboardHome() {
                 </div>
 
                 {/* Drafts Card */}
-                <div className="bg-black/50 backdrop-blur-xl border-y-4 border-orange-600 p-4 rounded-lg hover:shadow-md transition">
+                <div className="bg-black/50 backdrop-blur-md sm:backdrop-blur-xl border-y-4 border-orange-600 p-4 rounded-lg hover:shadow-md transition">
                   <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-3">
                     <div className="text-center lg:text-left">
                       <p className="text-orange-700 text-xs font-semibold mb-1 uppercase tracking-wide">
@@ -266,7 +272,7 @@ export default function DashboardHome() {
                 </div>
 
                 {/* Total Card - Full width on mobile grid */}
-                <div className="col-span-2 lg:col-span-1 bg-black/50 backdrop-blur-xl border-y-4 border-blue-600 p-4 rounded-lg hover:shadow-md transition">
+                <div className="col-span-2 lg:col-span-1 bg-black/50 backdrop-blur-md sm:backdrop-blur-xl border-y-4 border-blue-600 p-4 rounded-lg hover:shadow-md transition">
                   <div className="flex flex-col lg:flex-row items-center lg:justify-between gap-3">
                     <div className="text-center lg:text-left">
                       <p className="text-blue-700 text-xs font-semibold mb-1 uppercase tracking-wide">

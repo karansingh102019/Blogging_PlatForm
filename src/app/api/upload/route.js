@@ -1,5 +1,10 @@
+// app/api/upload/route.js
+
 import { NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
+
+export const runtime = 'nodejs'; // ✅ Add this
+export const maxDuration = 60; // ✅ 60 seconds timeout
 
 export async function POST(req) {
   try {
@@ -7,26 +12,59 @@ export async function POST(req) {
     const file = formData.get("file");
 
     if (!file) {
-      return NextResponse.json({ error: "No file" }, { status: 400 });
+      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
+
+    // File validation
+    const fileType = file.type;
+    if (!fileType.startsWith('image/')) {
+      return NextResponse.json({ error: "Only images allowed" }, { status: 400 });
+    }
+
+    // Check file size (5MB limit)
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: "File too large (max 5MB)" }, { status: 400 });
     }
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    console.log("📤 Uploading to Cloudinary...");
+
     const result = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        { folder: "upload" }, // 👈 blogs / profiles both
-        (err, res) => {
-          if (err) reject(err);
-          resolve(res);
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "blogify",
+          resource_type: "auto",
+          transformation: [
+            { width: 1200, height: 630, crop: "limit" }, // Auto resize
+            { quality: "auto:good" }
+          ]
+        },
+        (error, result) => {
+          if (error) {
+            console.error("❌ Cloudinary Error:", error);
+            reject(error);
+          } else {
+            console.log("✅ Upload successful:", result.secure_url);
+            resolve(result);
+          }
         }
-      ).end(buffer);
+      );
+      
+      uploadStream.end(buffer);
     });
 
-    return NextResponse.json({ url: result.secure_url });
+    return NextResponse.json({ 
+      url: result.secure_url,
+      publicId: result.public_id 
+    });
 
   } catch (err) {
     console.error("UPLOAD ERROR:", err);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Upload failed", 
+      details: err.message 
+    }, { status: 500 });
   }
 }

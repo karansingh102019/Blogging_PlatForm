@@ -3,6 +3,7 @@
 "use client";
 
 import { use, useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import { Inter } from "next/font/google";
@@ -31,11 +32,15 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-inter",
+  display: "swap",
+  preload: true,
 });
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
   weight: "400",
+  display: "swap",
+  preload: true,
 });
 
 export default function BlogDetail({ params }) {
@@ -51,16 +56,17 @@ export default function BlogDetail({ params }) {
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [guestId, setGuestId] = useState(null);
 
+  // 🔥 COMBINED useEffect to reduce re-renders
   useEffect(() => {
+    // Set guest ID
     let id = localStorage.getItem("guestId");
     if (!id) {
       id = `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       localStorage.setItem("guestId", id);
     }
     setGuestId(id);
-  }, []);
 
-  useEffect(() => {
+    // Check authentication
     const token = localStorage.getItem("token");
     setIsAuthenticated(!!token);
   }, []);
@@ -232,19 +238,19 @@ export default function BlogDetail({ params }) {
     <>
       <Navbar />
 
-      {/* Profile Modal */}
+      {/* Profile Modal - Lazy loaded */}
       {showProfileModal && (
         <div
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center px-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-md sm:backdrop-blur-sm z-50 flex items-center justify-center px-4"
           onClick={() => setShowProfileModal(false)}
         >
           <div
-            className="bg-gradient-to-br from-black-900 to-slate-800 rounded-xl sm:rounded-2xl shadow-2xl max-w-2xl w-full relative overflow-hidden border border-blue-500/20 max-h-[90vh] overflow-y-auto"
+            className="bg-gradient-to-br from-black-900 to-slate-800 rounded-xl sm:rounded-2xl shadow-lg sm:shadow-2xl max-w-2xl w-full relative overflow-hidden border border-blue-500/20 max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setShowProfileModal(false)}
-              className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 p-2 rounded-full hover:bg-white/10 transition bg-black/50 backdrop-blur-sm"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 p-2 rounded-full hover:bg-white/10 transition bg-black/50 backdrop-blur-md sm:backdrop-blur-sm"
             >
               <FiX size={18} className="sm:w-5 sm:h-5 text-white" />
             </button>
@@ -256,6 +262,9 @@ export default function BlogDetail({ params }) {
                   fill
                   className="object-cover"
                   alt="Cover"
+                  quality={75}
+                  sizes="(max-width: 768px) 100vw, 768px"
+                  loading="lazy"
                 />
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600"></div>
@@ -271,6 +280,9 @@ export default function BlogDetail({ params }) {
                     height={80}
                     className="rounded-lg sm:rounded-xl border-4 border-slate-800 relative z-10 sm:w-[100px] sm:h-[100px]"
                     alt={blog.author}
+                    quality={75}
+                    sizes="(max-width: 768px) 80px, 100px"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="w-20 h-20 sm:w-[100px] sm:h-[100px] rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold border-4 border-slate-800 relative z-10 flex-shrink-0">
@@ -346,6 +358,8 @@ export default function BlogDetail({ params }) {
                 alt={blog.title}
                 className="object-cover opacity-40"
                 priority
+                quality={75}
+                sizes="100vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent"></div>
             </>
@@ -385,7 +399,7 @@ export default function BlogDetail({ params }) {
         </div>
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-          <div className="bg-black/20 backdrop-blur-xl rounded-lg sm:rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 border border-blue-500/20">
+          <div className="bg-black/20 backdrop-blur-md sm:backdrop-blur-xl rounded-lg sm:rounded-xl p-4 sm:p-6 mb-4 sm:mb-6 border border-blue-500/20">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
               <div className="flex items-center gap-3 sm:gap-4 flex-1 w-full sm:w-auto min-w-0">
                 <button
@@ -399,6 +413,9 @@ export default function BlogDetail({ params }) {
                       height={48}
                       className="rounded-lg hover:opacity-80 transition border-2 border-blue-500/50 sm:w-14 sm:h-14"
                       alt={blog.author}
+                      quality={75}
+                      sizes="(max-width: 768px) 48px, 56px"
+                      loading="lazy"
                     />
                   ) : (
                     <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center text-white text-base sm:text-lg font-bold hover:opacity-80 transition border-2 border-blue-500/50">
@@ -476,7 +493,7 @@ export default function BlogDetail({ params }) {
             )}
           </div>
 
-          <div className="bg-black/20 backdrop-blur-xl rounded-lg sm:rounded-xl p-4 sm:p-5 mb-4 sm:mb-6 border border-blue-500/20">
+          <div className="bg-black/20 backdrop-blur-md sm:backdrop-blur-xl rounded-lg sm:rounded-xl p-4 sm:p-5 mb-4 sm:mb-6 border border-blue-500/20">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
               <div className="flex items-center gap-2 sm:gap-3">
                 <button
@@ -519,7 +536,7 @@ export default function BlogDetail({ params }) {
           </div>
 
           {blog.description && (
-            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-l-4 border-blue-500 p-4 sm:p-5 rounded-r-lg sm:rounded-r-xl mb-4 sm:mb-6 backdrop-blur-xl">
+            <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 border-l-4 border-blue-500 p-4 sm:p-5 rounded-r-lg sm:rounded-r-xl mb-4 sm:mb-6 backdrop-blur-md sm:backdrop-blur-xl">
               <p className="text-sm sm:text-base text-blue-100 leading-relaxed italic">
                 {blog.description}
               </p>
@@ -527,7 +544,7 @@ export default function BlogDetail({ params }) {
           )}
 
           <article
-            className="bg-black/20 backdrop-blur-xl text-gray-300 rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 border border-blue-500/20
+            className="bg-black/20 backdrop-blur-md sm:backdrop-blur-xl text-gray-300 rounded-lg sm:rounded-xl p-4 sm:p-6 lg:p-8 mb-4 sm:mb-6 border border-blue-500/20
             prose prose-sm sm:prose-base lg:prose-lg prose-invert max-w-none
             overflow-hidden break-words
             prose-headings:text-white prose-headings:font-bold prose-headings:break-words
@@ -537,7 +554,7 @@ export default function BlogDetail({ params }) {
             prose-p:text-sm sm:prose-p:text-base prose-p:text-blue-100/90 prose-p:leading-relaxed prose-p:mb-3 sm:prose-p:mb-4 prose-p:break-words
             prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline prose-a:break-all prose-a:text-sm sm:prose-a:text-base
             prose-strong:text-white prose-strong:font-semibold prose-strong:break-words
-            prose-img:rounded-lg prose-img:shadow-2xl prose-img:my-4 sm:prose-img:my-6 prose-img:border prose-img:border-blue-500/20 prose-img:w-full prose-img:h-auto
+            prose-img:rounded-lg prose-img:shadow-lg sm:prose-img:shadow-2xl prose-img:my-4 sm:prose-img:my-6 prose-img:border prose-img:border-blue-500/20 prose-img:w-full prose-img:h-auto
             prose-blockquote:border-l-4 prose-blockquote:border-blue-500 prose-blockquote:pl-3 sm:prose-blockquote:pl-4 md:prose-blockquote:pl-6 
             prose-blockquote:italic prose-blockquote:text-blue-200/80 prose-blockquote:my-4 prose-blockquote:text-sm sm:prose-blockquote:text-base prose-blockquote:break-words
             prose-code:bg-blue-500/10 prose-code:px-1.5 sm:prose-code:px-2 prose-code:py-1 prose-code:rounded prose-code:text-blue-300 prose-code:before:content-none prose-code:after:content-none prose-code:text-xs sm:prose-code:text-sm prose-code:break-all
@@ -549,7 +566,7 @@ export default function BlogDetail({ params }) {
             dangerouslySetInnerHTML={{ __html: blog.content }}
           />
 
-          <div className="bg-black/30 backdrop-blur-xl border border-blue-500/30 rounded-lg sm:rounded-xl p-6 sm:p-8 text-center">
+          <div className="bg-black/30 backdrop-blur-md sm:backdrop-blur-xl border border-blue-500/30 rounded-lg sm:rounded-xl p-6 sm:p-8 text-center">
             <GradientText
               colors={["#40ffaa", "#4079ff", "#40ffaa", "#4079ff", "#40ffaa"]}
               animationSpeed={8}

@@ -73,21 +73,27 @@ export default function Navbar() {
     }
   };
 
-  const handleSearch = () => {
-    console.log("Searching for:", query);
-  };
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
-    <nav className="fixed py-2 px-4 sm:px-6 top-0 w-full z-50 transition-all duration-300 backdrop-blur-xl bg-black/60 border-b-[0.5px] border-white/10">
+    <nav className="fixed py-2 px-4 sm:px-6 top-0 w-full z-50 transition-all duration-300 backdrop-blur-md sm:backdrop-blur-xl bg-black/60 border-b-[0.5px] border-white/10">
       <div className="flex items-center justify-between">
         {/* Logo - Responsive sizing */}
         <Link href="/" className="flex-shrink-0">
-          <svg 
-            width="120" 
-            height="40" 
-            viewBox="0 0 330 120" 
+          <svg
+            viewBox="0 0 360 130"
+            className="w-[120px] h-[40px] sm:w-[150px] sm:h-[50px]"
             fill="none"
-            className="sm:w-[150px] sm:h-[50px]"
           >
             <g transform="scale(0.8) translate(10, 15)">
               <path
@@ -100,8 +106,8 @@ export default function Navbar() {
             </g>
 
             <text
-              x="140"
-              y="95"
+              x={isDesktop ? 140 : 160}
+              y={isDesktop ? 95 : 100}
               fontFamily="Inter, Poppins, sans-serif"
               fontSize="60"
               fontWeight="600"
@@ -198,6 +204,9 @@ export default function Navbar() {
                       height={32}
                       className="rounded-full border w-[28px] h-[28px] lg:w-[32px] lg:h-[32px]"
                       alt="avatar"
+                      quality={75}
+                      sizes="(max-width: 768px) 28px, 32px"
+                      loading="lazy"
                       onError={(e) => {
                         e.target.src =
                           "https://ui-avatars.com/api/?name=" +
@@ -209,13 +218,18 @@ export default function Navbar() {
                       {user.name ? user.name[0].toUpperCase() : "U"}
                     </div>
                   )}
-                  <span className="text-sm lg:text-base max-w-[80px] lg:max-w-none truncate">{user.name}</span>
-                  <FiChevronDown size={16} className="lg:w-[18px] lg:h-[18px]" />
+                  <span className="text-sm lg:text-base max-w-[80px] lg:max-w-none truncate">
+                    {user.name}
+                  </span>
+                  <FiChevronDown
+                    size={16}
+                    className="lg:w-[18px] lg:h-[18px]"
+                  />
                 </button>
 
                 {/* Dropdown Menu */}
                 {dropdownOpen && (
-                  <div className="absolute -right-3 backdrop-blur-xl top-12 mt-3 w-48 bg-white/10 shadow-lg rounded-lg py-2 animate-slideDown">
+                  <div className="absolute -right-3 backdrop-blur-md sm:backdrop-blur-xl top-12 mt-3 w-48 bg-white/10 shadow-lg rounded-lg py-2 animate-slideDown">
                     <Link
                       href="/dashboard/profile"
                       className="block px-4 py-2 hover:bg-gray-800 text-gray-300"

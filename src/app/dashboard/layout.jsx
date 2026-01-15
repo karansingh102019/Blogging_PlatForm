@@ -76,7 +76,7 @@ export default function DashboardLayout({ children }) {
 
         {/* SIDEBAR */}
         <aside
-          className={`fixed top-0 left-0 h-screen backdrop-blur-xl bg-black/60 shadow-2xl transition-all duration-300 z-50 flex flex-col
+          className={`fixed top-0 left-0 h-screen backdrop-blur-md sm:backdrop-blur-xl bg-black/60 shadow-2xl transition-all duration-300 z-50 flex flex-col
             ${isOpen ? "w-64 sm:w-72" : "w-20"}
             ${
               isMobileOpen
