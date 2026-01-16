@@ -1,27 +1,14 @@
 // app/api/upload/route.js
 
 import { NextResponse } from "next/server";
-import cloudinary from "@/lib/cloudinary";
 
 export const runtime = 'nodejs'; 
 export const maxDuration = 60; 
 
 export async function POST(req) {
   try {
-    console.log("🔍 Checking Cloudinary Config...");
-    console.log("Cloud Name:", process.env.CLOUDINARY_CLOUD_NAME);
-    console.log("API Key exists:", !!process.env.CLOUDINARY_API_KEY);
-    console.log("API Secret exists:", !!process.env.CLOUDINARY_API_SECRET);
-
+    console.log("🔍 Starting upload process...");
     
-    if (!process.env.CLOUDINARY_CLOUD_NAME || 
-        !process.env.CLOUDINARY_API_KEY || 
-        !process.env.CLOUDINARY_API_SECRET) {
-      return NextResponse.json({ 
-        error: "Cloudinary credentials missing in environment variables" 
-      }, { status: 500 });
-    }
-
     const formData = await req.formData();
     const file = formData.get("file");
 
@@ -40,35 +27,47 @@ export async function POST(req) {
       return NextResponse.json({ error: "File too large (max 5MB)" }, { status: 400 });
     }
 
+    console.log("📤 Converting file to base64...");
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const base64 = buffer.toString('base64');
+    const dataURI = `data:${fileType};base64,${base64}`;
 
-    console.log("📤 Uploading to Cloudinary...");
+    console.log("📤 Uploading to Cloudinary (Unsigned)...");
     console.log("File size:", file.size, "bytes");
 
-    const result = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          folder: "Nexus",
-          resource_type: "auto",
-          transformation: [
-            { width: 1200, height: 630, crop: "limit" },
-            { quality: "auto:good" }
-          ]
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = 'nexus_blogs';
+
+    // Unsigned upload via REST API
+    const uploadResponse = await fetch(
+      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
         },
-        (error, result) => {
-          if (error) {
-            console.error("Cloudinary Error:", JSON.stringify(error, null, 2));
-            reject(error);
-          } else {
-            console.log("✅ Upload successful:", result.secure_url);
-            resolve(result);
-          }
-        }
-      );
-      
-      uploadStream.end(buffer);
-    });
+        body: JSON.stringify({
+          file: dataURI,
+          upload_preset: uploadPreset,
+          folder: 'Nexus',
+        }),
+      }
+    );
+
+    console.log("📊 Cloudinary response status:", uploadResponse.status);
+
+    if (!uploadResponse.ok) {
+      const errorText = await uploadResponse.text();
+      console.error('❌ Cloudinary Error Response:', errorText);
+      return NextResponse.json({ 
+        error: "Cloudinary upload failed",
+        details: errorText 
+      }, { status: 500 });
+    }
+
+    const result = await uploadResponse.json();
+    console.log("✅ Upload successful:", result.secure_url);
 
     return NextResponse.json({ 
       url: result.secure_url,
