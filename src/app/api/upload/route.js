@@ -8,6 +8,20 @@ export const maxDuration = 60;
 
 export async function POST(req) {
   try {
+    console.log("🔍 Checking Cloudinary Config...");
+    console.log("Cloud Name:", process.env.CLOUDINARY_CLOUD_NAME);
+    console.log("API Key exists:", !!process.env.CLOUDINARY_API_KEY);
+    console.log("API Secret exists:", !!process.env.CLOUDINARY_API_SECRET);
+
+    
+    if (!process.env.CLOUDINARY_CLOUD_NAME || 
+        !process.env.CLOUDINARY_API_KEY || 
+        !process.env.CLOUDINARY_API_SECRET) {
+      return NextResponse.json({ 
+        error: "Cloudinary credentials missing in environment variables" 
+      }, { status: 500 });
+    }
+
     const formData = await req.formData();
     const file = formData.get("file");
 
@@ -30,11 +44,11 @@ export async function POST(req) {
     const buffer = Buffer.from(bytes);
 
     console.log("📤 Uploading to Cloudinary...");
+    console.log("File size:", file.size, "bytes");
 
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          upload_preset: "nexus_blogs",
           folder: "Nexus",
           resource_type: "auto",
           transformation: [
@@ -44,7 +58,7 @@ export async function POST(req) {
         },
         (error, result) => {
           if (error) {
-            console.error("❌ Cloudinary Error:", error);
+            console.error("Cloudinary Error:", JSON.stringify(error, null, 2));
             reject(error);
           } else {
             console.log("✅ Upload successful:", result.secure_url);
