@@ -3,8 +3,8 @@
 import { NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
 
-export const runtime = 'nodejs'; // ✅ Add this
-export const maxDuration = 60; // ✅ 60 seconds timeout
+export const runtime = 'nodejs'; 
+export const maxDuration = 60; 
 
 export async function POST(req) {
   try {
@@ -34,10 +34,11 @@ export async function POST(req) {
     const result = await new Promise((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         {
-          folder: "blogify",
+          upload_preset: "nexus_blogs",
+          folder: "Nexus",
           resource_type: "auto",
           transformation: [
-            { width: 1200, height: 630, crop: "limit" }, // Auto resize
+            { width: 1200, height: 630, crop: "limit" },
             { quality: "auto:good" }
           ]
         },

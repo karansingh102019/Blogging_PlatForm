@@ -117,7 +117,7 @@ export default function DashboardHome() {
                 {/* Image - Hidden on mobile, shown on large screens */}
                 <div className="hidden lg:block flex-shrink-0">
                   <Image
-                    src="/Cht.png"
+                    src="/Chat2.png"
                     alt="Dashboard illustration"
                     width={300}
                     height={300}
