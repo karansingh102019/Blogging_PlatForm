@@ -33,15 +33,13 @@ export async function POST(req) {
     const base64 = buffer.toString('base64');
     const dataURI = `data:${fileType};base64,${base64}`;
 
-    // ✅ CLEAN FILENAME - Remove slashes and special characters
-    const originalFileName = file.name;
-    const cleanFileName = originalFileName
-      .replace(/[\/\\]/g, '-')  // Replace slashes with dashes
-      .replace(/[^a-zA-Z0-9._-]/g, '_'); // Replace other special chars
+    // Generate unique filename without special characters
+    const timestamp = Date.now();
+    const randomString = Math.random().toString(36).substring(7);
+    const cleanFileName = `nexus_${timestamp}_${randomString}`;
 
     console.log("📤 Uploading to Cloudinary (Unsigned)...");
-    console.log("Original filename:", originalFileName);
-    console.log("Clean filename:", cleanFileName);
+    console.log("Generated filename:", cleanFileName);
     console.log("File size:", file.size, "bytes");
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
@@ -58,7 +56,6 @@ export async function POST(req) {
         body: JSON.stringify({
           file: dataURI,
           upload_preset: uploadPreset,
-          public_id: cleanFileName.replace(/\.[^/.]+$/, ''),
         }),
       }
     );
