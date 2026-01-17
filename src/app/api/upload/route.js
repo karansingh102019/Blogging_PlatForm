@@ -45,7 +45,7 @@ export async function POST(req) {
     console.log("File size:", file.size, "bytes");
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = 'nexus_blogs';
+    const uploadPreset = 'nexusblogs';
 
     // Unsigned upload via REST API
     const uploadResponse = await fetch(
@@ -58,8 +58,7 @@ export async function POST(req) {
         body: JSON.stringify({
           file: dataURI,
           upload_preset: uploadPreset,
-          folder: 'Nexus',
-          public_id: cleanFileName.replace(/\.[^/.]+$/, ''), // Remove extension from public_id
+          public_id: cleanFileName.replace(/\.[^/.]+$/, ''),
         }),
       }
     );
