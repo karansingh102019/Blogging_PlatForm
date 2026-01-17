@@ -43,7 +43,7 @@ export async function POST(req) {
     console.log("File size:", file.size, "bytes");
 
     const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = 'nexusblogs';
+    const uploadPreset = 'nexus_upload';
 
     // Unsigned upload via REST API
     const uploadResponse = await fetch(
