@@ -1,14 +1,13 @@
 // app/api/upload/route.js
 
 import { NextResponse } from "next/server";
+import cloudinary from "@/lib/cloudinary";
 
 export const runtime = 'nodejs'; 
 export const maxDuration = 60; 
 
 export async function POST(req) {
   try {
-    console.log("🔍 Starting upload process...");
-    
     const formData = await req.formData();
     const file = formData.get("file");
 
@@ -27,52 +26,34 @@ export async function POST(req) {
       return NextResponse.json({ error: "File too large (max 5MB)" }, { status: 400 });
     }
 
-    console.log("📤 Converting file to base64...");
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
-    const base64 = buffer.toString('base64');
-    const dataURI = `data:${fileType};base64,${base64}`;
 
-    // Generate unique filename without special characters
-    const timestamp = Date.now();
-    const randomString = Math.random().toString(36).substring(7);
-    const cleanFileName = `nexus_${timestamp}_${randomString}`;
+    console.log("📤 Uploading to Cloudinary...");
 
-    console.log("📤 Uploading to Cloudinary (Unsigned)...");
-    console.log("Generated filename:", cleanFileName);
-    console.log("File size:", file.size, "bytes");
-
-    const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = 'nexus_upload';
-
-    // Unsigned upload via REST API
-    const uploadResponse = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+    const result = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "blogify",
+          resource_type: "auto",
+          transformation: [
+            { width: 1200, height: 630, crop: "limit" }, // Auto resize
+            { quality: "auto:good" }
+          ]
         },
-        body: JSON.stringify({
-          file: dataURI,
-          upload_preset: uploadPreset,
-        }),
-      }
-    );
-
-    console.log("📊 Cloudinary response status:", uploadResponse.status);
-
-    if (!uploadResponse.ok) {
-      const errorText = await uploadResponse.text();
-      console.error('❌ Cloudinary Error Response:', errorText);
-      return NextResponse.json({ 
-        error: "Cloudinary upload failed",
-        details: errorText 
-      }, { status: 500 });
-    }
-
-    const result = await uploadResponse.json();
-    console.log("✅ Upload successful:", result.secure_url);
+        (error, result) => {
+          if (error) {
+            console.error(" Cloudinary Error:", error);
+            reject(error);
+          } else {
+            console.log("✅ Upload successful:", result.secure_url);
+            resolve(result);
+          }
+        }
+      );
+      
+      uploadStream.end(buffer);
+    });
 
     return NextResponse.json({ 
       url: result.secure_url,
